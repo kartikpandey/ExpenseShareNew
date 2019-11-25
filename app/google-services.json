@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "348176996995",
+    "firebase_url": "https://expenare.firebaseio.com",
+    "project_id": "expenare",
+    "storage_bucket": "expenare.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348176996995:android:49219a82bab60d4f5959b6",
+        "android_client_info": {
+          "package_name": "com.dheeraj.expensesharenew"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "348176996995-jg403a3b2h7jksu1vn6fld3fp9tm1qeh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBu8IvxDkamK1sm9koiEMZQUFeBr-jS9ps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "348176996995-jg403a3b2h7jksu1vn6fld3fp9tm1qeh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

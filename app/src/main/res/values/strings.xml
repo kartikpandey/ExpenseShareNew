@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">expenare</string>
+    <string name="share_your_expenses">Share Your Expenses</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="enter_email">Enter email!</string>
+    <string name="enter_pass">Enter password</string>
+    <string name="enter_confirm_pass">Enter confirm password</string>
+    <string name="pass_not_match">Password does not match</string>
+    <string name="enter_correct_email">Enter correct email</string>
+    <string name="password_limit">Password should be at least 8 characters</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="mob_number">Mobile Number</string>
+    <string name="mob_limit">Incorrect mobile number</string>
+    <string name="enter_fname">Enter first name</string>
+    <string name="enter_lname">Enter last name</string>
+    <string name="enter_mob">Enter mobile number</string>
+</resources>

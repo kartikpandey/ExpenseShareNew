@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:text="New Group Creation"
+            android:textColor="@color/white"
+            android:fontFamily="@font/capsuula"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_alignParentStart="true"/>
+
+        <ImageView
+            android:id="@+id/imgClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close_24dp"
+            android:padding="7dp"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etGroupName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/edittext_drawable"
+        android:hint="Enter Group Name"
+        android:padding="8dp" />
+
+    <com.dheeraj.expensesharenew.CustomViews.CustomButton
+        android:id="@+id/btnCreateGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/capsuula"
+        android:layout_margin="10dp"
+        android:text="Create Group"/>
+
+</LinearLayout>
