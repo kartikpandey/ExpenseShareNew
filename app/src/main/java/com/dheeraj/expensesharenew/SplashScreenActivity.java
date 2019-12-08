@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dheeraj.expensesharenew.userinfo.UserDetailsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
 
     @BindView(R.id.linearLayoutParent)
     LinearLayout linearLayoutParent;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_splash_screen);
         getSupportActionBar().hide();
 
         ButterKnife.bind(this);
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     void setTimeOut() {
         new Handler().postDelayed(() -> {
             if (mfFirebaseAuth.getCurrentUser() == null) {
-                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                Intent i = new Intent(SplashScreenActivity.this, LoginActivity.class);
                 startActivity(i);
                 this.finish();
             } else {
@@ -72,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue() != null) {
-                            startActivity(new Intent(MainActivity.this, GroupDashboardActivity.class));
+                            startActivity(new Intent(SplashScreenActivity.this, GroupDashboardActivity.class));
                             finishAffinity();
                         } else {
-                            startActivity(new Intent(MainActivity.this, UserDetailsActivity.class));
+                            startActivity(new Intent(SplashScreenActivity.this, UserDetailsActivity.class));
                             finishAffinity();
                         }
                     }

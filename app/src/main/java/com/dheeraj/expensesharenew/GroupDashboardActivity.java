@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
 
 import com.dheeraj.expensesharenew.CustomViews.CustomButton;
+import com.dheeraj.expensesharenew.userinfo.UserInfoModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
