@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".BaseActivity"></activity>
         <activity android:name=".userinfo.UserDetailsActivity" />
-        <activity android:name=".GroupDashboardActivity" />
+        <activity android:name=".groupdashboard.GroupDashboardActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".SplashScreenActivity">

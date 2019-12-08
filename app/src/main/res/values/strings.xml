@@ -17,4 +17,7 @@
     <string name="enter_fname">Enter first name</string>
     <string name="enter_lname">Enter last name</string>
     <string name="enter_mob">Enter mobile number</string>
+    <string name="group_list_child_key">GroupsList</string>
+    <string name="group_member_list_child">groupMembersList</string>
+    <string name="admin">Admin</string>
 </resources>
