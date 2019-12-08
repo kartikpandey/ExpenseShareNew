@@ -1,6 +1,6 @@
 package com.dheeraj.expensesharenew.userinfo;
 
-import com.dheeraj.expensesharenew.GroupModel;
+import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
 
 import java.util.ArrayList;
 
@@ -58,5 +58,13 @@ public class UserInfoModel {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public ArrayList<GroupModel> getGroupList() {
+        return groupList;
+    }
+
+    public void setGroupList(ArrayList<GroupModel> groupList) {
+        this.groupList = groupList;
     }
 }

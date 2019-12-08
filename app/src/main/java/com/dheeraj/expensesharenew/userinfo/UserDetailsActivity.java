@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.dheeraj.expensesharenew.GroupDashboardActivity;
+import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
 import com.dheeraj.expensesharenew.LoginActivity;
 import com.dheeraj.expensesharenew.R;
 import com.dheeraj.expensesharenew.Utils;
