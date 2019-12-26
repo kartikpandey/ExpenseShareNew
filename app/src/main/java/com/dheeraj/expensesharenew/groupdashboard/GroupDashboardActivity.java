@@ -1,4 +1,4 @@
-package com.dheeraj.expensesharenew;
+package com.dheeraj.expensesharenew.groupdashboard;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -17,7 +17,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
 
+import com.dheeraj.expensesharenew.BaseActivity;
 import com.dheeraj.expensesharenew.CustomViews.CustomButton;
+import com.dheeraj.expensesharenew.LoginActivity;
+import com.dheeraj.expensesharenew.R;
+import com.dheeraj.expensesharenew.Utils;
+import com.dheeraj.expensesharenew.userinfo.UserInfoModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,9 +31,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupDashboardActivity extends BaseActivity {
 
@@ -37,8 +45,14 @@ public class GroupDashboardActivity extends BaseActivity {
     private String title;
     Gson gson = new Gson();
     UserInfoModel userInfoModel;
+    AppCompatEditText etGroupName;
+    CustomButton btnCreateGroup;
 
     private DatabaseReference mdDatabaseReference;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    String groupKey;
+    ArrayList<GroupMember> groupMembers;
+    GroupModel groupModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +80,19 @@ public class GroupDashboardActivity extends BaseActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     gson = new Gson();
-                    userInfoModel = gson.fromJson(dataSnapshot.getValue().toString(), UserInfoModel.class);
-                    setTitle(userInfoModel.getfName() + " " + userInfoModel.getlName());
+                    ArrayList<GroupModel> groupList = new ArrayList<>(); // Result will be holded Here
+                    for(DataSnapshot dsp : dataSnapshot.getChildren()){
+                        GroupModel groupModel = gson.fromJson(String.valueOf(dsp.getKey()), GroupModel.class); //add result into array list
+                        groupList.add(groupModel); //add result into array list
+                    }
+//                    gson = new Gson();
+//                    try{
+//                        String data = dataSnapshot.getValue().toString();
+//                        userInfoModel = gson.fromJson(data, UserInfoModel.class);
+//                        setTitle(userInfoModel.getfName() + " " + userInfoModel.getlName());
+//                    }catch (JsonSyntaxException jsonSyntaxException){
+//                        jsonSyntaxException.printStackTrace();
+//                    }
                 } else {
                     Toast.makeText(GroupDashboardActivity.this, "Oops, some problem occured!\nPlease login try again", Toast.LENGTH_LONG).show();
                     mfFirebaseAuth.signOut();
@@ -94,8 +119,8 @@ public class GroupDashboardActivity extends BaseActivity {
         dialog.setContentView(R.layout.custom_alert_new_group);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        CustomButton btnCreateGroup = dialog.findViewById(R.id.btnCreateGroup);
-        AppCompatEditText etGroupName = dialog.findViewById(R.id.etGroupName);
+        btnCreateGroup = dialog.findViewById(R.id.btnCreateGroup);
+        etGroupName = dialog.findViewById(R.id.etGroupName);
         ImageView imgClose = dialog.findViewById(R.id.imgClose);
 
         btnCreateGroup.setOnClickListener(v -> {
@@ -103,8 +128,7 @@ public class GroupDashboardActivity extends BaseActivity {
                 etGroupName.requestFocus();
                 etGroupName.setError("Enter group name");
             } else {
-                GroupModel groupModel = new GroupModel("Group_"+1, etGroupName.getText().toString());
-                createGroup(groupModel);
+                createGroup();
                 dialog.cancel();
             }
         });
@@ -115,24 +139,64 @@ public class GroupDashboardActivity extends BaseActivity {
         dialog.show();
     }
 
-    void createGroup(GroupModel groupModel) {
-        FirebaseUser fbUser = mfFirebaseAuth.getCurrentUser();
-
+    void createGroup() {
         Utils.showProgress(this, "Creating Group", "Please Wait");
 
-        String uid = fbUser.getUid();
-//        mdDatabaseReference.child(fbUser.getUid()).setValue(userInfoModel).addOnCompleteListener(task -> {
-        mdDatabaseReference.push().setValue(groupModel).addOnCompleteListener(task -> {//multiple informations in with same user(instertion will add new information)
+        groupMembers = new ArrayList<>();
+        groupMembers.add(new GroupMember(userInfoModel.getuID(),
+                userInfoModel.getfName() + " " + userInfoModel.getlName(),
+                getResources().getString(R.string.admin)));
+        groupKey = database.getReference(etGroupName.getText().toString()).push().getKey();
+
+        groupModel = new GroupModel(groupKey, etGroupName.getText().toString(), groupMembers);
+
+        mdDatabaseReference
+                .child(getResources().getString(R.string.group_list_child_key))
+                .child(groupKey)
+                .setValue(groupModel).addOnCompleteListener(task -> {//multiple informations in with same user(instertion will add new information)
             {
                 if (task.isSuccessful()) {
                     Toast.makeText(this, "Group Created", Toast.LENGTH_SHORT).show();
                     Utils.hideProgress();
+                    addCreatedGroupToUserInfo(groupModel);
+//                    addUserAsMember(groupKey);
                 } else {
                     Toast.makeText(this, task.getException().toString(), Toast.LENGTH_LONG).show();
                     Utils.hideProgress();
                 }
             }
         });//single information with single user (instertion will update information)
+    }
+
+    void addCreatedGroupToUserInfo(GroupModel groupModel){
+        ArrayList<GroupModel> groupModels = new ArrayList<>();
+        groupModels.add(groupModel);
+        mdDatabaseReference.child("UsersDetail").child(userInfoModel.getuID()).child("memberOfGroups").setValue(groupModels);
+    }
+//memberOfGroups
+    void addUserAsMember(String groupKey) {
+        Utils.showProgress(this, "Creating Group", "Please Wait");
+
+        groupMembers = new ArrayList<>();
+        groupMembers.add(new GroupMember(userInfoModel.getuID(),
+                userInfoModel.getfName() + " " + userInfoModel.getlName(),
+                getResources().getString(R.string.admin)));
+
+        mdDatabaseReference
+                .child(getResources().getString(R.string.group_list_child_key))
+                .child(groupKey)
+                .child(getResources().getString(R.string.group_member_list_child))
+                .setValue(groupMembers).addOnCompleteListener(task -> {//multiple informations in with same user(instertion will add new information)
+            {
+                if (task.isSuccessful()) {
+                    Toast.makeText(this, "Member Added", Toast.LENGTH_SHORT).show();
+                    Utils.hideProgress();
+                } else {
+                    Toast.makeText(this, task.getException().toString(), Toast.LENGTH_LONG).show();
+                    Utils.hideProgress();
+                }
+            }
+        });
     }
 
     @Override

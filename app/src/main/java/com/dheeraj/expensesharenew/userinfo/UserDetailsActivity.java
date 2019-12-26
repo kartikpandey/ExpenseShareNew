@@ -1,4 +1,4 @@
-package com.dheeraj.expensesharenew;
+package com.dheeraj.expensesharenew.userinfo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,10 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
+import com.dheeraj.expensesharenew.LoginActivity;
+import com.dheeraj.expensesharenew.R;
+import com.dheeraj.expensesharenew.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -132,7 +136,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             if (isValidated()) {
                 FirebaseUser fbUser = mfFirebaseAuth.getCurrentUser();
 
-                UserInfoModel userInfoModel = new UserInfoModel(fName, lName, mobNo, fbUser.getUid(), gender);
+                UserInfoModel userInfoModel = new UserInfoModel(fName, lName, mobNo, fbUser.getUid(), gender,null);
 
                 Utils.showProgress(this, "Adding Profile Details", "");
 

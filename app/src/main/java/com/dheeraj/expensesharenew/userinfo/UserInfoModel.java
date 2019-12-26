@@ -1,17 +1,23 @@
-package com.dheeraj.expensesharenew;
+package com.dheeraj.expensesharenew.userinfo;
+
+import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
+
+import java.util.ArrayList;
 
 public class UserInfoModel {
     private String fName, lName, mobNo, uID, gender;
+    private ArrayList<GroupModel> groupList;
 
     public UserInfoModel() {
     }
 
-    public UserInfoModel(String fName, String lName, String mobNo, String uID, String gender) {
+    public UserInfoModel(String fName, String lName, String mobNo, String uID, String gender, ArrayList<GroupModel> groupList) {
         this.fName = fName;
         this.lName = lName;
         this.mobNo = mobNo;
         this.uID = uID;
         this.gender = gender;
+        this.groupList = groupList;
     }
 
     public String getfName() {
@@ -52,5 +58,13 @@ public class UserInfoModel {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public ArrayList<GroupModel> getGroupList() {
+        return groupList;
+    }
+
+    public void setGroupList(ArrayList<GroupModel> groupList) {
+        this.groupList = groupList;
     }
 }
