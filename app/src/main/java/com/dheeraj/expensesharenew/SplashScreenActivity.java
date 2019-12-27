@@ -40,7 +40,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     Animation animFadein;
 
-    int timeoutSeconds = 2;
+    float timeoutSeconds = 1.5f;
 
     private FirebaseAuth mfFirebaseAuth;
 
@@ -88,6 +88,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, timeoutSeconds * 1000);
+        }, (int) timeoutSeconds * 1000);
     }
 }
