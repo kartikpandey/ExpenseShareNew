@@ -70,7 +70,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 startActivity(i);
                 this.finish();
             } else {
-                mdDatabaseReference.child(mfFirebaseAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                mdDatabaseReference.child(mfFirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue() != null) {

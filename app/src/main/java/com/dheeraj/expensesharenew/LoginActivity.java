@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("User Name : ", mfFirebaseAuth.getCurrentUser().getEmail());
                     Toast.makeText(this, "Login Successfull", Toast.LENGTH_SHORT).show();
                     Utils.hideProgress();
-                    mdDatabaseReference.child(mfFirebaseAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                    mdDatabaseReference.child(mfFirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.getValue() != null) {

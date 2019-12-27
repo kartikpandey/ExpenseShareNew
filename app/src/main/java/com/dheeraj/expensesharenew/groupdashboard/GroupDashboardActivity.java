@@ -33,6 +33,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -43,8 +46,6 @@ public class GroupDashboardActivity extends BaseActivity {
     FirebaseAuth mfFirebaseAuth;
     private TextView textViewTitle;
     private String title;
-    Gson gson = new Gson();
-    UserInfoModel userInfoModel;
     AppCompatEditText etGroupName;
     CustomButton btnCreateGroup;
 
@@ -54,6 +55,9 @@ public class GroupDashboardActivity extends BaseActivity {
     ArrayList<GroupMember> groupMembers;
     GroupModel groupModel;
 
+    // user details will be holded Here
+    UserInfoModel userInfoModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +66,7 @@ public class GroupDashboardActivity extends BaseActivity {
         mdDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mfFirebaseAuth = FirebaseAuth.getInstance();
         getUserData();
+        userInfoModel = new UserInfoModel();
     }
 
     private void setActionBarData() {
@@ -75,16 +80,36 @@ public class GroupDashboardActivity extends BaseActivity {
     }
 
     void getUserData() {
-        mdDatabaseReference.child("UsersDetail").child(mfFirebaseAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+        mdDatabaseReference.child("UsersDetail").child(mfFirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    gson = new Gson();
-                    ArrayList<GroupModel> groupList = new ArrayList<>(); // Result will be holded Here
-                    for(DataSnapshot dsp : dataSnapshot.getChildren()){
-                        GroupModel groupModel = gson.fromJson(String.valueOf(dsp.getKey()), GroupModel.class); //add result into array list
-                        groupList.add(groupModel); //add result into array list
+
+                    userInfoModel.setfName(dataSnapshot.child("fName").getValue().toString());
+                    userInfoModel.setlName(dataSnapshot.child("lName").getValue().toString());
+                    userInfoModel.setMobNo(dataSnapshot.child("mobNo").getValue().toString());
+                    userInfoModel.setGender(dataSnapshot.child("gender").getValue().toString());
+                    userInfoModel.setuID(dataSnapshot.child("uID").getValue().toString());
+
+                    setTitle(userInfoModel.getfName() + " " + userInfoModel.getlName());
+
+                    ArrayList<GroupModel> groupList = new ArrayList<>();
+                    for (DataSnapshot dsp : dataSnapshot.child("memberOfGroups").getChildren()) {
+                        String groupId = "";
+                        String groupName = "";
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(dsp.getValue().toString());
+                            groupId = jsonObject.getString("groupId");
+                            groupName = jsonObject.getString("groupName");
+                            if (!groupId.isEmpty() && !groupName.isEmpty()) {
+                                groupList.add(new GroupModel(groupId, groupName, new ArrayList<>())); //add result into array list
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
+                    userInfoModel.setGroupList(groupList);
 //                    gson = new Gson();
 //                    try{
 //                        String data = dataSnapshot.getValue().toString();
@@ -94,7 +119,7 @@ public class GroupDashboardActivity extends BaseActivity {
 //                        jsonSyntaxException.printStackTrace();
 //                    }
                 } else {
-                    Toast.makeText(GroupDashboardActivity.this, "Oops, some problem occured!\nPlease login try again", Toast.LENGTH_LONG).show();
+                    Toast.makeText(GroupDashboardActivity.this, "Oops, some problem occured!\nPlease try login again", Toast.LENGTH_LONG).show();
                     mfFirebaseAuth.signOut();
                     startActivity(new Intent(GroupDashboardActivity.this, LoginActivity.class));
                 }
@@ -143,9 +168,9 @@ public class GroupDashboardActivity extends BaseActivity {
         Utils.showProgress(this, "Creating Group", "Please Wait");
 
         groupMembers = new ArrayList<>();
-        groupMembers.add(new GroupMember(userInfoModel.getuID(),
-                userInfoModel.getfName() + " " + userInfoModel.getlName(),
-                getResources().getString(R.string.admin)));
+//        groupMembers.add(new GroupMember(userInfoModel.getuID(),
+//                userInfoModel.getfName() + " " + userInfoModel.getlName(),
+//                getResources().getString(R.string.admin)));
         groupKey = database.getReference(etGroupName.getText().toString()).push().getKey();
 
         groupModel = new GroupModel(groupKey, etGroupName.getText().toString(), groupMembers);
@@ -158,6 +183,12 @@ public class GroupDashboardActivity extends BaseActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(this, "Group Created", Toast.LENGTH_SHORT).show();
                     Utils.hideProgress();
+
+                    addGroupMember(groupKey, new GroupMember(userInfoModel.getuID(),
+                            userInfoModel.getfName() + " " + userInfoModel.getlName(),
+                            getResources().getString(R.string.admin)));
+
+
                     addCreatedGroupToUserInfo(groupModel);
 //                    addUserAsMember(groupKey);
                 } else {
@@ -168,12 +199,28 @@ public class GroupDashboardActivity extends BaseActivity {
         });//single information with single user (instertion will update information)
     }
 
-    void addCreatedGroupToUserInfo(GroupModel groupModel){
-        ArrayList<GroupModel> groupModels = new ArrayList<>();
-        groupModels.add(groupModel);
-        mdDatabaseReference.child("UsersDetail").child(userInfoModel.getuID()).child("memberOfGroups").setValue(groupModels);
+    void addGroupMember(String groupKey, GroupMember groupMember){
+        mdDatabaseReference
+                .child(getResources().getString(R.string.group_list_child_key))
+                .child(groupKey)
+                .child("groupMembersList")
+                .child(userInfoModel.getuID())
+                .setValue(groupMember);
     }
-//memberOfGroups
+
+    void addCreatedGroupToUserInfo(GroupModel groupModel) {
+//        ArrayList<GroupModel> groupModels = new ArrayList<>();
+//        groupModels.add(groupModel);
+        groupModel.groupMembersList = new ArrayList<>();
+        mdDatabaseReference.child("UsersDetail")
+                .child(userInfoModel.getuID())
+                .child("memberOfGroups")
+                .child(groupModel.getGroupId())
+                .setValue(groupModel);
+        getUserData();
+    }
+
+    //memberOfGroups
     void addUserAsMember(String groupKey) {
         Utils.showProgress(this, "Creating Group", "Please Wait");
 
