@@ -40,7 +40,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     Animation animFadein;
 
-    int timeoutSeconds = 3;
+    int timeoutSeconds = 2;
 
     private FirebaseAuth mfFirebaseAuth;
 
