@@ -4,34 +4,32 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dheeraj.expensesharenew.BaseActivity;
 import com.dheeraj.expensesharenew.CustomViews.CustomButton;
 import com.dheeraj.expensesharenew.LoginActivity;
 import com.dheeraj.expensesharenew.R;
 import com.dheeraj.expensesharenew.Utils;
+import com.dheeraj.expensesharenew.groupdashboard.adapter.GroupDashboardAdapter;
 import com.dheeraj.expensesharenew.userinfo.UserInfoModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,12 +37,14 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class GroupDashboardActivity extends BaseActivity {
 
     FirebaseAuth mfFirebaseAuth;
-    private TextView textViewTitle;
+//    private TextView textViewTitle;
     private String title;
     AppCompatEditText etGroupName;
     CustomButton btnCreateGroup;
@@ -54,6 +54,10 @@ public class GroupDashboardActivity extends BaseActivity {
     String groupKey;
     ArrayList<GroupMember> groupMembers;
     GroupModel groupModel;
+    GroupDashboardAdapter groupDashboardAdapter;
+
+    @BindView(R.id.recyclerViewGroups)
+    RecyclerView recyclerViewGroups;
 
     // user details will be holded Here
     UserInfoModel userInfoModel;
@@ -62,22 +66,22 @@ public class GroupDashboardActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_dashboard);
-        setActionBarData();
+        ButterKnife.bind(this);
         mdDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mfFirebaseAuth = FirebaseAuth.getInstance();
         getUserData();
         userInfoModel = new UserInfoModel();
     }
 
-    private void setActionBarData() {
-        LayoutInflater mInflater = LayoutInflater.from(this);
-        View view = mInflater.inflate(R.layout.profile_action_bar_layout, null);
-        textViewTitle = view.findViewById(R.id.textViewUserName);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setCustomView(view);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-    }
+//    public void setActionBarData() {
+//        LayoutInflater mInflater = LayoutInflater.from(this);
+//        View view = mInflater.inflate(R.layout.profile_action_bar_layout, null);
+//        textViewTitle = view.findViewById(R.id.textViewUserName);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setCustomView(view);
+//        getSupportActionBar().setDisplayShowCustomEnabled(true);
+//    }
 
     void getUserData() {
         mdDatabaseReference.child("UsersDetail").child(mfFirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -110,6 +114,7 @@ public class GroupDashboardActivity extends BaseActivity {
                         }
                     }
                     userInfoModel.setGroupList(groupList);
+                    setGroupListData(groupList);
 //                    gson = new Gson();
 //                    try{
 //                        String data = dataSnapshot.getValue().toString();
@@ -132,9 +137,17 @@ public class GroupDashboardActivity extends BaseActivity {
         });
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-        textViewTitle.setText(this.title);
+    void setGroupListData(ArrayList<GroupModel> groupList){
+        groupDashboardAdapter = new GroupDashboardAdapter(groupList);
+        recyclerViewGroups.setHasFixedSize(true);
+        recyclerViewGroups.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewGroups.setAdapter(groupDashboardAdapter);
+
+//        RecyclerView recyclerViewGroups = findViewById(R.id.recyclerViewGroups);
+//
+//        recyclerViewGroups.setHasFixedSize(true);
+//        recyclerViewGroups.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerViewGroups.setAdapter(groupDashboardAdapter);
     }
 
     void createNewGroupDialog(Context context) {
@@ -263,6 +276,7 @@ public class GroupDashboardActivity extends BaseActivity {
                 return true;
             case R.id.logout:
                 mfFirebaseAuth.signOut();
+                finishAffinity();
                 startActivity(new Intent(this, LoginActivity.class));
                 return true;
             default:
