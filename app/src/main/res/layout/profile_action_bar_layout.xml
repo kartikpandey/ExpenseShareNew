@@ -8,8 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:gravity="center">
 
         <ImageButton
             android:id="@+id/imageButtonBack"
@@ -17,7 +16,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/back_icon"
             android:foreground="?android:attr/selectableItemBackground"
-            android:onClick="imageButtonBackClick" />
+            android:onClick="imageButtonBackClick"
+            android:layout_centerVertical="true"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:gravity="center"
-                android:text="User name can be long"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 

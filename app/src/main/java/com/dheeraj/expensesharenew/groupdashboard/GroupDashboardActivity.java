@@ -44,12 +44,11 @@ import butterknife.ButterKnife;
 public class GroupDashboardActivity extends BaseActivity {
 
     FirebaseAuth mfFirebaseAuth;
-//    private TextView textViewTitle;
+    //    private TextView textViewTitle;
     private String title;
     AppCompatEditText etGroupName;
     CustomButton btnCreateGroup;
 
-    private DatabaseReference mdDatabaseReference;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     String groupKey;
     ArrayList<GroupMember> groupMembers;
@@ -60,69 +59,49 @@ public class GroupDashboardActivity extends BaseActivity {
     RecyclerView recyclerViewGroups;
 
     // user details will be holded Here
-    UserInfoModel userInfoModel;
+    public static UserInfoModel userInfoModel;
+
+    static GroupDashboardActivity instance;
+
+    public static GroupDashboardActivity getInstance() {
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_dashboard);
         ButterKnife.bind(this);
-        mdDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mfFirebaseAuth = FirebaseAuth.getInstance();
         getUserData();
         userInfoModel = new UserInfoModel();
+        instance = this;
     }
 
-//    public void setActionBarData() {
-//        LayoutInflater mInflater = LayoutInflater.from(this);
-//        View view = mInflater.inflate(R.layout.profile_action_bar_layout, null);
-//        textViewTitle = view.findViewById(R.id.textViewUserName);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        getSupportActionBar().setCustomView(view);
-//        getSupportActionBar().setDisplayShowCustomEnabled(true);
-//    }
-
     void getUserData() {
-        mdDatabaseReference.child("UsersDetail").child(mfFirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mdDatabaseReference.child(KeyUsersDetail).child(mfFirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
 
-                    userInfoModel.setfName(dataSnapshot.child("fName").getValue().toString());
-                    userInfoModel.setlName(dataSnapshot.child("lName").getValue().toString());
-                    userInfoModel.setMobNo(dataSnapshot.child("mobNo").getValue().toString());
-                    userInfoModel.setGender(dataSnapshot.child("gender").getValue().toString());
-                    userInfoModel.setuID(dataSnapshot.child("uID").getValue().toString());
+                    userInfoModel.setfName(dataSnapshot.child(KeyFName).getValue().toString());
+                    userInfoModel.setlName(dataSnapshot.child(KeyLName).getValue().toString());
+                    userInfoModel.setMobNo(dataSnapshot.child(KeyMobNo).getValue().toString());
+                    userInfoModel.setGender(dataSnapshot.child(KeyGender).getValue().toString());
+                    userInfoModel.setuID(dataSnapshot.child(KeyUID).getValue().toString());
 
                     setTitle(userInfoModel.getfName() + " " + userInfoModel.getlName());
 
                     ArrayList<GroupModel> groupList = new ArrayList<>();
-                    for (DataSnapshot dsp : dataSnapshot.child("memberOfGroups").getChildren()) {
-                        String groupId = "";
-                        String groupName = "";
-                        JSONObject jsonObject = null;
-                        try {
-                            jsonObject = new JSONObject(dsp.getValue().toString());
-                            groupId = jsonObject.getString("groupId");
-                            groupName = jsonObject.getString("groupName");
-                            if (!groupId.isEmpty() && !groupName.isEmpty()) {
-                                groupList.add(new GroupModel(groupId, groupName, new ArrayList<>())); //add result into array list
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    for (DataSnapshot dsp : dataSnapshot.child(KeyMemberOfGroups).getChildren()) {
+
+                        groupList.add(new GroupModel(
+                                dsp.child(KeyGroupId).getValue().toString(),
+                                dsp.child(KeyGroupName).getValue().toString(),
+                                new ArrayList<>())); //add result into array list
                     }
                     userInfoModel.setGroupList(groupList);
                     setGroupListData(groupList);
-//                    gson = new Gson();
-//                    try{
-//                        String data = dataSnapshot.getValue().toString();
-//                        userInfoModel = gson.fromJson(data, UserInfoModel.class);
-//                        setTitle(userInfoModel.getfName() + " " + userInfoModel.getlName());
-//                    }catch (JsonSyntaxException jsonSyntaxException){
-//                        jsonSyntaxException.printStackTrace();
-//                    }
                 } else {
                     Toast.makeText(GroupDashboardActivity.this, "Oops, some problem occured!\nPlease try login again", Toast.LENGTH_LONG).show();
                     mfFirebaseAuth.signOut();
@@ -137,17 +116,11 @@ public class GroupDashboardActivity extends BaseActivity {
         });
     }
 
-    void setGroupListData(ArrayList<GroupModel> groupList){
+    void setGroupListData(ArrayList<GroupModel> groupList) {
         groupDashboardAdapter = new GroupDashboardAdapter(groupList);
         recyclerViewGroups.setHasFixedSize(true);
         recyclerViewGroups.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewGroups.setAdapter(groupDashboardAdapter);
-
-//        RecyclerView recyclerViewGroups = findViewById(R.id.recyclerViewGroups);
-//
-//        recyclerViewGroups.setHasFixedSize(true);
-//        recyclerViewGroups.setLayoutManager(new LinearLayoutManager(this));
-//        recyclerViewGroups.setAdapter(groupDashboardAdapter);
     }
 
     void createNewGroupDialog(Context context) {
@@ -179,22 +152,16 @@ public class GroupDashboardActivity extends BaseActivity {
 
     void createGroup() {
         Utils.showProgress(this, "Creating Group", "Please Wait");
-
         groupMembers = new ArrayList<>();
-//        groupMembers.add(new GroupMember(userInfoModel.getuID(),
-//                userInfoModel.getfName() + " " + userInfoModel.getlName(),
-//                getResources().getString(R.string.admin)));
         groupKey = database.getReference(etGroupName.getText().toString()).push().getKey();
-
         groupModel = new GroupModel(groupKey, etGroupName.getText().toString(), groupMembers);
-
         mdDatabaseReference
-                .child(getResources().getString(R.string.group_list_child_key))
+                .child(KeyGroupsList)
                 .child(groupKey)
                 .setValue(groupModel).addOnCompleteListener(task -> {//multiple informations in with same user(instertion will add new information)
             {
                 if (task.isSuccessful()) {
-                    Toast.makeText(this, "Group Created", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.group_created), Toast.LENGTH_SHORT).show();
                     Utils.hideProgress();
 
                     addGroupMember(groupKey, new GroupMember(userInfoModel.getuID(),
@@ -212,22 +179,20 @@ public class GroupDashboardActivity extends BaseActivity {
         });//single information with single user (instertion will update information)
     }
 
-    void addGroupMember(String groupKey, GroupMember groupMember){
+    void addGroupMember(String groupKey, GroupMember groupMember) {
         mdDatabaseReference
-                .child(getResources().getString(R.string.group_list_child_key))
+                .child(KeyGroupsList)
                 .child(groupKey)
-                .child("groupMembersList")
+                .child(KeyGroupMembersList)
                 .child(userInfoModel.getuID())
                 .setValue(groupMember);
     }
 
     void addCreatedGroupToUserInfo(GroupModel groupModel) {
-//        ArrayList<GroupModel> groupModels = new ArrayList<>();
-//        groupModels.add(groupModel);
         groupModel.groupMembersList = new ArrayList<>();
-        mdDatabaseReference.child("UsersDetail")
+        mdDatabaseReference.child(KeyUsersDetail)
                 .child(userInfoModel.getuID())
-                .child("memberOfGroups")
+                .child(KeyMemberOfGroups)
                 .child(groupModel.getGroupId())
                 .setValue(groupModel);
         getUserData();
@@ -282,10 +247,6 @@ public class GroupDashboardActivity extends BaseActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void imageButtonBackClick(View view) {
-        finish();
     }
 
     public boolean saveToFile(String data) {

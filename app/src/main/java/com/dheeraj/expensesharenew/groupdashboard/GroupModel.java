@@ -6,6 +6,9 @@ public class GroupModel {
     String groupId, groupName;
     ArrayList<GroupMember> groupMembersList;
 
+    public GroupModel() {
+    }
+
     public GroupModel(String groupId, String groupName, ArrayList<GroupMember> groupMembersList) {
         this.groupId = groupId;
         this.groupName = groupName;

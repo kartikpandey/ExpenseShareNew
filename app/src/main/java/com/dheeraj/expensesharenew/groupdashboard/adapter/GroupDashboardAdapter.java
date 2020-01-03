@@ -1,6 +1,7 @@
 package com.dheeraj.expensesharenew.groupdashboard.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dheeraj.expensesharenew.R;
+import com.dheeraj.expensesharenew.groupDetail.GroupDetailActivity;
+import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
 import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
 
 import java.util.List;
@@ -75,7 +78,12 @@ public class GroupDashboardAdapter extends RecyclerView.Adapter<GroupDashboardAd
         @Override
         public void onClick(View v) {
             if (v == relativeLayoutGroup) {
-
+                GroupDashboardActivity.getInstance().startActivity(new
+                        Intent(GroupDashboardActivity.getInstance(), GroupDetailActivity.class)
+                        .putExtra("GroupId", GroupDashboardActivity
+                                .userInfoModel.getGroupList()
+                                .get(getAdapterPosition())
+                                .getGroupId()));
             }
         }
     }

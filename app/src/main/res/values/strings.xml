@@ -20,4 +20,5 @@
     <string name="group_list_child_key">GroupsList</string>
     <string name="group_member_list_child">groupMembersList</string>
     <string name="admin">Admin</string>
+    <string name="group_created">Group Created</string>
 </resources>
