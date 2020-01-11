@@ -55,4 +55,8 @@ public class BaseActivity extends AppCompatActivity {
     public void imageButtonBackClick(View view) {
         finish();
     }
+
+    public void imageButtonNotificationClick(View view) {
+
+    }
 }

@@ -12,5 +12,6 @@
     <color name="ButtonColor">#90FF9696</color>>
     <color name="ButtonColorSecondry">#90FF4A4A</color>>
     <color name="transparentButtonColor">#90FFD6C8</color>>
-    <color name="transparentButtonSecondry">#90FF784A</color>>
+    <color name="transparentButtonSecondry">#90FF784A</color>
+    <color name="black">#000000</color>>
 </resources>
