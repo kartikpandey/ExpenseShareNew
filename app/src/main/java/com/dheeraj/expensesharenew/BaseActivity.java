@@ -27,6 +27,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String KeyMemberName= "memberName";
     public static String KeyMemberUid= "memberUid";
     public static String KeyMemberType= "memberType";
+    public static String KeyNotifications= "notifications";
     public static DatabaseReference mdDatabaseReference;
 
     @Override

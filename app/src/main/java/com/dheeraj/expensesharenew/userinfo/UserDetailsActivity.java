@@ -1,9 +1,11 @@
 package com.dheeraj.expensesharenew.userinfo;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,14 +16,22 @@ import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
 import com.dheeraj.expensesharenew.LoginActivity;
 import com.dheeraj.expensesharenew.R;
 import com.dheeraj.expensesharenew.Utils;
+import com.dheeraj.expensesharenew.groupinfo.GroupInfoActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.dheeraj.expensesharenew.BaseActivity.KeyMobNo;
+import static com.dheeraj.expensesharenew.BaseActivity.KeyUsersDetail;
 
 public class UserDetailsActivity extends AppCompatActivity {
 
@@ -49,6 +59,8 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     String fName, lName, mobNo, gender = "m";
 
+    boolean isExists;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +72,7 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         mfFirebaseAuth = FirebaseAuth.getInstance();
 
-        mdDatabaseReference = FirebaseDatabase.getInstance().getReference().child("UsersDetail");
+        mdDatabaseReference = FirebaseDatabase.getInstance().getReference().child(KeyUsersDetail);
 
 //        mdDatabaseReference.addValueEventListener(new ValueEventListener() {
 //            @Override
@@ -136,31 +148,61 @@ public class UserDetailsActivity extends AppCompatActivity {
             if (isValidated()) {
                 FirebaseUser fbUser = mfFirebaseAuth.getCurrentUser();
 
-                UserInfoModel userInfoModel = new UserInfoModel(fName, lName, mobNo, fbUser.getUid(), gender,null);
+                UserInfoModel userInfoModel = new UserInfoModel(fName, lName, mobNo, fbUser.getUid(), gender, null);
 
                 Utils.showProgress(this, "Adding Profile Details", "");
-
-                String uid = fbUser.getUid();
-//            mdDatabaseReference.push().setValue(userInfoModel);//multiple informations in with same user(instertion will add new information)
-                mdDatabaseReference.child(fbUser.getUid()).setValue(userInfoModel).addOnCompleteListener(task -> {
-                    {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(this, "Information Saved", Toast.LENGTH_SHORT).show();
-                            Utils.hideProgress();
-                            startActivity(new Intent(this, GroupDashboardActivity.class));
-                            overridePendingTransition(0, 0);
-                            finishAffinity();
-                        } else {
-                            Toast.makeText(this, task.getException().toString(), Toast.LENGTH_LONG).show();
-                            Utils.hideProgress();
+                if (!isMobNoAlreadyExists(mobNo)) {
+                    String uid = fbUser.getUid();
+//                    mdDatabaseReference.push().setValue(userInfoModel);//multiple informations in with same user(instertion will add new information)
+                    mdDatabaseReference.child(fbUser.getUid()).setValue(userInfoModel).addOnCompleteListener(task -> {
+                        {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(this, "Information Saved", Toast.LENGTH_SHORT).show();
+                                Utils.hideProgress();
+                                startActivity(new Intent(this, GroupDashboardActivity.class));
+                                overridePendingTransition(0, 0);
+                                finishAffinity();
+                            } else {
+                                Toast.makeText(this, task.getException().toString(), Toast.LENGTH_LONG).show();
+                                Utils.hideProgress();
+                            }
                         }
-                    }
-                });//single information with single user (instertion will update information)
+                    });//single information with single user (instertion will update information)
+                } else {
+                    Utils.hideProgress();
+                    Toast.makeText(this, "Mobile Number is already registered with another user.", Toast.LENGTH_SHORT).show();
+                }
             }
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Some Problem Occured.\nPlease Try Again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Something went wrong.\nPlease Try Again", Toast.LENGTH_LONG).show();
         }
+
+    }
+
+    boolean isMobNoAlreadyExists(String mobNo) {
+        Query query = mdDatabaseReference.child(KeyUsersDetail)
+                .orderByChild(KeyMobNo)
+                .equalTo(mobNo);
+
+        isExists = false;
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    isExists = true;
+                } else {
+                    isExists = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return isExists;
     }
 
     public void signout(View view) {
