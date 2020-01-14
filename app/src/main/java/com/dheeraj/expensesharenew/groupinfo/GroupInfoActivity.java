@@ -24,6 +24,7 @@ import com.dheeraj.expensesharenew.groupDetail.GroupDetailActivity;
 import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
 import com.dheeraj.expensesharenew.groupdashboard.GroupMember;
 import com.dheeraj.expensesharenew.groupinfo.adapter.GroupInfoAdapter;
+import com.dheeraj.expensesharenew.groupinfo.model.InvitationModel;
 import com.dheeraj.expensesharenew.userinfo.UserInfoModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -108,58 +109,63 @@ public class GroupInfoActivity extends BaseActivity {
     }
 
     void addMember(String mobNo) {
-        Utils.showProgress(this, "Sending Invitation...", "");
-        Query query = mdDatabaseReference.child(KeyUsersDetail)
-                .orderByChild(KeyMobNo)
-                .equalTo(mobNo);
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Utils.hideProgress();
-                if (dataSnapshot.getValue() != null) {
-                    Log.d("memberData", dataSnapshot.toString());
-                    if (!dataSnapshot.getValue().toString().isEmpty()) {
-                        for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                            sendInvitation(dsp.child(KeyUID).getValue().toString());
+        try {
+            Utils.showProgress(this, "Sending Invitation...", "");
+            Query query = mdDatabaseReference.child(KeyUsersDetail)
+                    .orderByChild(KeyMobNo)
+                    .equalTo(mobNo);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        Log.d("memberData", dataSnapshot.toString());
+                        if (!dataSnapshot.getValue().toString().isEmpty()) {
+                            for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                                sendInvitation(dsp.child(KeyUID).getValue().toString());
+                            }
+                        } else {
+                            Toast.makeText(GroupInfoActivity.this, "No user found with this mobile number!", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         Toast.makeText(GroupInfoActivity.this, "No user found with this mobile number!", Toast.LENGTH_LONG).show();
                     }
-                } else {
-                    Toast.makeText(GroupInfoActivity.this, "No user found with this mobile number!", Toast.LENGTH_LONG).show();
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Utils.hideProgress();
-                Toast.makeText(GroupInfoActivity.this, "Something went wrong.\nPlease try again.", Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Utils.hideProgress();
+                    Toast.makeText(GroupInfoActivity.this, "Something went wrong.\nPlease try again.", Toast.LENGTH_LONG).show();
+                }
+            });
+        }catch (Exception e)
+        {
+            Log.d("Exception", e.toString());
+        }
     }
 
     //{xkTxChY7WeYW4S8oeX4c1uFnhLq1={uID=xkTxChY7WeYW4S8oeX4c1uFnhLq1, gender=m, mobNo=9876543210, fName=atul, memberOfGroups={-LxqE-UVVFaq5DBXeBBD={groupId=-LxqE-UVVFaq5DBXeBBD, groupName=atul}}, lName=pandey}} }
     void sendInvitation(String memberUid) {
-//        Toast.makeText(groupInfoActivity, memberUid, Toast.LENGTH_SHORT).show();
+        InvitationModel invitationModel = new InvitationModel(
+                GroupDetailActivity.groupDetail.getGroupId(),
+                GroupDetailActivity.groupDetail.getGroupName(),
+                GroupDashboardActivity.userInfoModel.getfName() + " " + GroupDashboardActivity.userInfoModel.getlName(),
+                GroupDashboardActivity.userInfoModel.getuID()
+        );
         String notificationId = database.getReference().push().getKey();
-//        mdDatabaseReference
-//                .child(KeyNotifications)
-//                .child(memberUid)
-//                .child(notificationId)
-//                .setValue().addOnCompleteListener(task -> {
-//            {
-//                if (task.isSuccessful()) {
-//                    Toast.makeText(this, "Information Saved", Toast.LENGTH_SHORT).show();
-//                    Utils.hideProgress();
-//                    startActivity(new Intent(this, GroupDashboardActivity.class));
-//                    overridePendingTransition(0, 0);
-//                    finishAffinity();
-//                } else {
-//                    Toast.makeText(this, task.getException().toString(), Toast.LENGTH_LONG).show();
-//                    Utils.hideProgress();
-//                }
-//            }
-//        });
+        mdDatabaseReference
+                .child(KeyNotifications)
+                .child(memberUid)
+                .child(notificationId)
+                .setValue(invitationModel).addOnCompleteListener(task -> {
+            {
+                if (task.isSuccessful()) {
+                    Toast.makeText(this, "Invitation sent", Toast.LENGTH_SHORT).show();
+                    Utils.hideProgress();
+                } else {
+                    Toast.makeText(this, task.getException().toString(), Toast.LENGTH_LONG).show();
+                    Utils.hideProgress();
+                }
+            }
+        });
     }
 }
