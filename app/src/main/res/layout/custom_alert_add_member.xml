@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="7dp"
-            android:text="New Group Creation"
+            android:text="Add Member"
             android:textColor="@color/white"
             android:fontFamily="@font/capsuula"
             android:textSize="15sp"
@@ -33,16 +33,17 @@
     </RelativeLayout>
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etGroupName"
+        android:id="@+id/etMemberMobile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="@drawable/edittext_drawable"
-        android:hint="Enter Group Name"
+        android:hint="Member's moblie number"
+        android:inputType="number"
         android:padding="8dp" />
 
     <com.dheeraj.expensesharenew.CustomViews.CustomButton
-        android:id="@+id/btnCreateGroup"
+        android:id="@+id/btnSendInvitation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/capsuula"
@@ -50,6 +51,6 @@
         android:layout_gravity="center_horizontal"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:text="Create Group"/>
+        android:text="Send Invitation"/>
 
 </LinearLayout>

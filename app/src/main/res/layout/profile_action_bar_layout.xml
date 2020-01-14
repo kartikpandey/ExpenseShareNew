@@ -4,7 +4,7 @@
     android:layout_height="30dp"
     android:background="@color/colorLogoBack">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
@@ -17,10 +17,11 @@
             android:background="@drawable/back_icon"
             android:foreground="?android:attr/selectableItemBackground"
             android:onClick="imageButtonBackClick"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
@@ -37,12 +38,13 @@
                 android:maxLines="1"
                 android:text="@string/app_name"
                 android:textColor="@color/white"
+                android:fontFamily="@font/capsuula"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textViewUserName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="15dp"
@@ -50,10 +52,44 @@
                 android:gravity="center"
                 android:text=""
                 android:textColor="@color/white"
+                android:fontFamily="@font/capsuula"
                 android:textSize="12sp" />
 
         </LinearLayout>
 
-    </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/relativeLayoutNotificationIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:layout_centerVertical="true">
+
+            <ImageButton
+                android:id="@+id/imageButtonNotification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_notification"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="imageButtonNotificationClick"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:id="@+id/textViewNotifyCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="10"
+                android:fontFamily="@font/capsuula"
+                android:paddingTop="5dp"
+                android:textStyle="bold"
+                android:textSize="8sp"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
