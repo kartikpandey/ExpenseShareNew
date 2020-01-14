@@ -86,7 +86,7 @@
                 android:fontFamily="@font/capsuula"
                 android:paddingTop="5dp"
                 android:textStyle="bold"
-                android:textSize="8sp"/>
+                android:textSize="10sp"/>
 
         </RelativeLayout>
 
