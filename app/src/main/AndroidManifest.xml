@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".groupinfo.GroupInfoActivity"></activity>
+        <activity android:name=".notification.NotificationActivity"></activity>
+        <activity android:name=".groupinfo.GroupInfoActivity" />
         <activity android:name=".groupDetail.GroupDetailActivity" />
         <activity android:name=".BaseActivity" />
         <activity android:name=".userinfo.UserDetailsActivity" />

@@ -90,14 +90,23 @@ public class GroupInfoActivity extends BaseActivity {
 
         CustomButton btnSendInvitation = dialog.findViewById(R.id.btnSendInvitation);
         AppCompatEditText etMemberMobile = dialog.findViewById(R.id.etMemberMobile);
+        AppCompatEditText etMessage = dialog.findViewById(R.id.etMessage);
         ImageView imgClose = dialog.findViewById(R.id.imgClose);
+        etMemberMobile.requestFocus();
 
         btnSendInvitation.setOnClickListener(v -> {
             if (etMemberMobile.getText().toString().isEmpty()) {
                 etMemberMobile.requestFocus();
                 etMemberMobile.setError("Enter member's mobile number");
             } else {
-                addMember(etMemberMobile.getText().toString());
+                if (etMessage.getText().toString().isEmpty()) {
+                    findUserWithMobNo(etMemberMobile.getText().toString(),
+                            "Hi there!\n You are invited to join our expenare group " +
+                                    GroupDetailActivity.groupDetail.getGroupName()
+                    );
+                }else{
+                    findUserWithMobNo(etMemberMobile.getText().toString(),etMessage.getText().toString());
+                }
                 dialog.cancel();
             }
         });
@@ -108,7 +117,7 @@ public class GroupInfoActivity extends BaseActivity {
         dialog.show();
     }
 
-    void addMember(String mobNo) {
+    void findUserWithMobNo(String mobNo, String message) {
         try {
             Utils.showProgress(this, "Sending Invitation...", "");
             Query query = mdDatabaseReference.child(KeyUsersDetail)
@@ -121,12 +130,19 @@ public class GroupInfoActivity extends BaseActivity {
                         Log.d("memberData", dataSnapshot.toString());
                         if (!dataSnapshot.getValue().toString().isEmpty()) {
                             for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                                sendInvitation(dsp.child(KeyUID).getValue().toString());
+                                if (!dsp.child(KeyUID).getValue().toString().equals(userInfoModel.getuID())) {
+                                    sendInvitation(dsp.child(KeyUID).getValue().toString(), message);
+                                } else {
+                                    Utils.hideProgress();
+                                    Toast.makeText(GroupInfoActivity.this, "Looks like its your mobile number.", Toast.LENGTH_LONG).show();
+                                }
                             }
                         } else {
+                            Utils.hideProgress();
                             Toast.makeText(GroupInfoActivity.this, "No user found with this mobile number!", Toast.LENGTH_LONG).show();
                         }
                     } else {
+                        Utils.hideProgress();
                         Toast.makeText(GroupInfoActivity.this, "No user found with this mobile number!", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -137,19 +153,20 @@ public class GroupInfoActivity extends BaseActivity {
                     Toast.makeText(GroupInfoActivity.this, "Something went wrong.\nPlease try again.", Toast.LENGTH_LONG).show();
                 }
             });
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.d("Exception", e.toString());
         }
     }
 
     //{xkTxChY7WeYW4S8oeX4c1uFnhLq1={uID=xkTxChY7WeYW4S8oeX4c1uFnhLq1, gender=m, mobNo=9876543210, fName=atul, memberOfGroups={-LxqE-UVVFaq5DBXeBBD={groupId=-LxqE-UVVFaq5DBXeBBD, groupName=atul}}, lName=pandey}} }
-    void sendInvitation(String memberUid) {
+    void sendInvitation(String memberUid, String message) {
         InvitationModel invitationModel = new InvitationModel(
+                getResources().getString(R.string.value_invitation),
                 GroupDetailActivity.groupDetail.getGroupId(),
                 GroupDetailActivity.groupDetail.getGroupName(),
-                GroupDashboardActivity.userInfoModel.getfName() + " " + GroupDashboardActivity.userInfoModel.getlName(),
-                GroupDashboardActivity.userInfoModel.getuID()
+                userInfoModel.getfName() + " " + userInfoModel.getlName(),
+                userInfoModel.getuID(),
+                message
         );
         String notificationId = database.getReference().push().getKey();
         mdDatabaseReference
