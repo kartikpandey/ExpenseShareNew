@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
 import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
+import com.dheeraj.expensesharenew.groupinfo.model.InvitationModel;
+import com.dheeraj.expensesharenew.userinfo.UserInfoModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,7 +42,14 @@ public class BaseActivity extends AppCompatActivity {
     public static String KeyMemberUid = "memberUid";
     public static String KeyMemberType = "memberType";
     public static String KeyNotifications = "notifications";
+    public static String KeyNotificationType = "notificationType";
+    public static String KeySenderName = "senderName";
+    public static String KeySenderId = "senderId";
+    public static String KeyMessage = "message";
     public static DatabaseReference mdDatabaseReference;
+
+    public static UserInfoModel userInfoModel;
+    public static ArrayList<InvitationModel> invitationModelArrayList;
 
     @BindView(R.id.textViewNotifyCount)
     TextView textViewNotifyCount;
@@ -51,7 +60,12 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_base);
         setActionBarData();
         mdDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        getNotifications();
+        invitationModelArrayList = new ArrayList<>();
+        if (userInfoModel != null) {
+            if (userInfoModel.getuID() != null) {
+                getNotifications();
+            }
+        }
     }
 
     public void setActionBarData() {
@@ -77,9 +91,9 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-    void getNotifications() {
+    public void getNotifications() {
         mdDatabaseReference.child(KeyNotifications)
-                .child(GroupDashboardActivity.userInfoModel.getuID())
+                .child(userInfoModel.getuID())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -87,6 +101,15 @@ public class BaseActivity extends AppCompatActivity {
                         if (dataSnapshot.getValue() != null) {
                             for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                                 notificationCount++;
+                                String notificationType = dsp.child(KeyNotificationType).getValue().toString();
+                                if (notificationType.equals(getResources().getString(R.string.value_invitation))) {
+                                    invitationModelArrayList.add(new InvitationModel(notificationType,
+                                            dsp.child(KeyGroupId).getValue().toString(),
+                                            dsp.child(KeyGroupName).getValue().toString(),
+                                            dsp.child(KeySenderName).getValue().toString(),
+                                            dsp.child(KeySenderId).getValue().toString(),
+                                            dsp.child(KeyMessage).getValue().toString()));
+                                }
                             }
                         }
                         textViewNotifyCount.setText(notificationCount + "");

@@ -8,27 +8,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/capsuula"
             android:padding="7dp"
             android:text="Add Member"
             android:textColor="@color/white"
-            android:fontFamily="@font/capsuula"
             android:textSize="15sp"
-            android:textStyle="bold"
-            android:layout_alignParentStart="true"/>
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imgClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_close_24dp"
+            android:layout_alignParentEnd="true"
             android:padding="7dp"
-            android:layout_alignParentEnd="true" />
+            android:src="@drawable/ic_close_24dp" />
 
     </RelativeLayout>
 
@@ -40,17 +40,29 @@
         android:background="@drawable/edittext_drawable"
         android:hint="Member's moblie number"
         android:inputType="number"
+        android:maxLength="10"
+        android:padding="8dp" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etMessage"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/edittext_drawable"
+        android:gravity="top"
+        android:hint="Invitation message (Optional)"
+        android:maxLength="100"
         android:padding="8dp" />
 
     <com.dheeraj.expensesharenew.CustomViews.CustomButton
         android:id="@+id/btnSendInvitation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/capsuula"
-        android:layout_margin="10dp"
         android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/capsuula"
+        android:text="Send Invitation"
         android:textColor="@color/white"
-        android:textStyle="bold"
-        android:text="Send Invitation"/>
+        android:textStyle="bold" />
 
 </LinearLayout>

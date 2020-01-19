@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".groupinfo.GroupInfoActivity"
-    android:background="@drawable/radial_background">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/radial_background"
+    tools:context=".notification.NotificationActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMembers"
+        android:id="@+id/recyclerViewNotifications"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
@@ -16,17 +16,5 @@
         android:layoutAnimation="@anim/layout_animation_fall_down"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/group_layout" />
-
-    <ImageButton
-        android:id="@+id/buttonAddMember"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_add"
-        android:background="@null"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginRight="30dp"
-        android:elevation="5dp"/>
 
 </RelativeLayout>

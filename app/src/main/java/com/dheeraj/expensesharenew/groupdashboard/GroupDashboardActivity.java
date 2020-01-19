@@ -59,7 +59,6 @@ public class GroupDashboardActivity extends BaseActivity {
     RecyclerView recyclerViewGroups;
 
     // user details will be holded Here
-    public static UserInfoModel userInfoModel;
 
     static GroupDashboardActivity instance;
 
@@ -79,7 +78,10 @@ public class GroupDashboardActivity extends BaseActivity {
     }
 
     void getUserData() {
-        mdDatabaseReference.child(KeyUsersDetail).child(mfFirebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mdDatabaseReference
+                .child(KeyUsersDetail)
+                .child(mfFirebaseAuth.getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -102,6 +104,7 @@ public class GroupDashboardActivity extends BaseActivity {
                     }
                     userInfoModel.setGroupList(groupList);
                     setGroupListData(groupList);
+                    getNotifications();
                 } else {
                     Toast.makeText(GroupDashboardActivity.this, "Oops, some problem occured!\nPlease try login again", Toast.LENGTH_LONG).show();
                     mfFirebaseAuth.signOut();
