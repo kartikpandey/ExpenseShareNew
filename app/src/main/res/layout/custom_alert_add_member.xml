@@ -57,7 +57,7 @@
     <com.dheeraj.expensesharenew.CustomViews.CustomButton
         android:id="@+id/btnSendInvitation"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
         android:fontFamily="@font/capsuula"

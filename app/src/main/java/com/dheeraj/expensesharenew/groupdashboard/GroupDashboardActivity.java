@@ -82,41 +82,41 @@ public class GroupDashboardActivity extends BaseActivity {
                 .child(KeyUsersDetail)
                 .child(mfFirebaseAuth.getCurrentUser().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() != null) {
 
-                    userInfoModel.setfName(dataSnapshot.child(KeyFName).getValue().toString());
-                    userInfoModel.setlName(dataSnapshot.child(KeyLName).getValue().toString());
-                    userInfoModel.setMobNo(dataSnapshot.child(KeyMobNo).getValue().toString());
-                    userInfoModel.setGender(dataSnapshot.child(KeyGender).getValue().toString());
-                    userInfoModel.setuID(dataSnapshot.child(KeyUID).getValue().toString());
+                            userInfoModel.setfName(dataSnapshot.child(KeyFName).getValue().toString());
+                            userInfoModel.setlName(dataSnapshot.child(KeyLName).getValue().toString());
+                            userInfoModel.setMobNo(dataSnapshot.child(KeyMobNo).getValue().toString());
+                            userInfoModel.setGender(dataSnapshot.child(KeyGender).getValue().toString());
+                            userInfoModel.setuID(dataSnapshot.child(KeyUID).getValue().toString());
 
-                    setTitle(userInfoModel.getfName() + " " + userInfoModel.getlName());
+                            setTitle(userInfoModel.getfName() + " " + userInfoModel.getlName());
 
-                    ArrayList<GroupModel> groupList = new ArrayList<>();
-                    for (DataSnapshot dsp : dataSnapshot.child(KeyMemberOfGroups).getChildren()) {
+                            ArrayList<GroupModel> groupList = new ArrayList<>();
+                            for (DataSnapshot dsp : dataSnapshot.child(KeyMemberOfGroups).getChildren()) {
 
-                        groupList.add(new GroupModel(
-                                dsp.child(KeyGroupId).getValue().toString(),
-                                dsp.child(KeyGroupName).getValue().toString(),
-                                new ArrayList<>())); //add result into array list
+                                groupList.add(new GroupModel(
+                                        dsp.child(KeyGroupId).getValue().toString(),
+                                        dsp.child(KeyGroupName).getValue().toString(),
+                                        new ArrayList<>())); //add result into array list
+                            }
+                            userInfoModel.setGroupList(groupList);
+                            setGroupListData(groupList);
+                            getNotifications();
+                        } else {
+                            Toast.makeText(GroupDashboardActivity.this, "Oops, some problem occured!\nPlease try login again", Toast.LENGTH_LONG).show();
+                            mfFirebaseAuth.signOut();
+                            startActivity(new Intent(GroupDashboardActivity.this, LoginActivity.class));
+                        }
                     }
-                    userInfoModel.setGroupList(groupList);
-                    setGroupListData(groupList);
-                    getNotifications();
-                } else {
-                    Toast.makeText(GroupDashboardActivity.this, "Oops, some problem occured!\nPlease try login again", Toast.LENGTH_LONG).show();
-                    mfFirebaseAuth.signOut();
-                    startActivity(new Intent(GroupDashboardActivity.this, LoginActivity.class));
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                databaseError.getMessage();
-            }
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        databaseError.getMessage();
+                    }
+                });
     }
 
     void setGroupListData(ArrayList<GroupModel> groupList) {

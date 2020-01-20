@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
 import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
 import com.dheeraj.expensesharenew.groupinfo.model.InvitationModel;
+import com.dheeraj.expensesharenew.notification.NotificationActivity;
 import com.dheeraj.expensesharenew.userinfo.UserInfoModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -88,7 +89,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void imageButtonNotificationClick(View view) {
-
+        startActivity(new Intent(this, NotificationActivity.class));
     }
 
     public void getNotifications() {
