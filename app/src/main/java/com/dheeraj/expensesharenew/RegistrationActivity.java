@@ -99,7 +99,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     startActivity(new Intent(RegistrationActivity.this, UserDetailsActivity.class));
                     finish();
                 }else{
-                    Toast.makeText(this, task.getException().toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     Utils.hideProgress();
                 }
             });

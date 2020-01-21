@@ -43,7 +43,7 @@
         android:maxLength="10"
         android:padding="8dp" />
 
-    <androidx.appcompat.widget.AppCompatEditText
+    <!--<androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etMessage"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -52,7 +52,7 @@
         android:gravity="top"
         android:hint="Invitation message (Optional)"
         android:maxLength="100"
-        android:padding="8dp" />
+        android:padding="8dp" />-->
 
     <com.dheeraj.expensesharenew.CustomViews.CustomButton
         android:id="@+id/btnSendInvitation"

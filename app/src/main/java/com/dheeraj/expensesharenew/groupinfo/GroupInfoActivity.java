@@ -90,7 +90,7 @@ public class GroupInfoActivity extends BaseActivity {
 
         CustomButton btnSendInvitation = dialog.findViewById(R.id.btnSendInvitation);
         AppCompatEditText etMemberMobile = dialog.findViewById(R.id.etMemberMobile);
-        AppCompatEditText etMessage = dialog.findViewById(R.id.etMessage);
+//        AppCompatEditText etMessage = dialog.findViewById(R.id.etMessage);
         ImageView imgClose = dialog.findViewById(R.id.imgClose);
         etMemberMobile.requestFocus();
 
@@ -99,14 +99,7 @@ public class GroupInfoActivity extends BaseActivity {
                 etMemberMobile.requestFocus();
                 etMemberMobile.setError("Enter member's mobile number");
             } else {
-                if (etMessage.getText().toString().isEmpty()) {
-                    findUserWithMobNo(etMemberMobile.getText().toString(),
-                            "Hi there!\n You are invited to join our expenare group " +
-                                    GroupDetailActivity.groupDetail.getGroupName()
-                    );
-                }else{
-                    findUserWithMobNo(etMemberMobile.getText().toString(),etMessage.getText().toString());
-                }
+                findUserWithMobNo(etMemberMobile.getText().toString());
                 dialog.cancel();
             }
         });
@@ -117,7 +110,7 @@ public class GroupInfoActivity extends BaseActivity {
         dialog.show();
     }
 
-    void findUserWithMobNo(String mobNo, String message) {
+    void findUserWithMobNo(String mobNo) {
         try {
             Utils.showProgress(this, "Sending Invitation...", "");
             Query query = mdDatabaseReference.child(KeyUsersDetail)
@@ -131,7 +124,7 @@ public class GroupInfoActivity extends BaseActivity {
                         if (!dataSnapshot.getValue().toString().isEmpty()) {
                             for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                                 if (!dsp.child(KeyUID).getValue().toString().equals(userInfoModel.getuID())) {
-                                    sendInvitation(dsp.child(KeyUID).getValue().toString(), message);
+                                    sendInvitation(dsp.child(KeyUID).getValue().toString());
                                 } else {
                                     Utils.hideProgress();
                                     Toast.makeText(GroupInfoActivity.this, "Looks like its your mobile number.", Toast.LENGTH_LONG).show();
@@ -159,16 +152,15 @@ public class GroupInfoActivity extends BaseActivity {
     }
 
     //{xkTxChY7WeYW4S8oeX4c1uFnhLq1={uID=xkTxChY7WeYW4S8oeX4c1uFnhLq1, gender=m, mobNo=9876543210, fName=atul, memberOfGroups={-LxqE-UVVFaq5DBXeBBD={groupId=-LxqE-UVVFaq5DBXeBBD, groupName=atul}}, lName=pandey}} }
-    void sendInvitation(String memberUid, String message) {
+    void sendInvitation(String memberUid) {
+        String notificationId = database.getReference().push().getKey();
         InvitationModel invitationModel = new InvitationModel(
                 getResources().getString(R.string.value_invitation),
                 GroupDetailActivity.groupDetail.getGroupId(),
                 GroupDetailActivity.groupDetail.getGroupName(),
                 userInfoModel.getfName() + " " + userInfoModel.getlName(),
-                userInfoModel.getuID(),
-                message
+                userInfoModel.getuID(),notificationId
         );
-        String notificationId = database.getReference().push().getKey();
         mdDatabaseReference
                 .child(KeyNotifications)
                 .child(memberUid)
@@ -179,7 +171,7 @@ public class GroupInfoActivity extends BaseActivity {
                     Toast.makeText(this, "Invitation sent", Toast.LENGTH_SHORT).show();
                     Utils.hideProgress();
                 } else {
-                    Toast.makeText(this, task.getException().toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     Utils.hideProgress();
                 }
             }

@@ -14,6 +14,7 @@ import com.dheeraj.expensesharenew.CustomViews.CustomButton;
 import com.dheeraj.expensesharenew.R;
 import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
 import com.dheeraj.expensesharenew.groupinfo.model.InvitationModel;
+import com.dheeraj.expensesharenew.notification.NotificationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.textNotificationHeading.setText(invitationModelArrayListFiltered.get(position).getNotificationType());
-        holder.textInviteMessage.setText(invitationModelArrayListFiltered.get(position).getMessage());
+        holder.textInviteMessage.setText(invitationModelArrayListFiltered.get(position).getSenderName() +
+                " invited you to join expenare group " +
+                invitationModelArrayListFiltered.get(position).getGroupName());
     }
 
     @Override
@@ -95,6 +98,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
             } else if (buttonDecline.equals(view)) {
             } else if (imageDelete.equals(view)) {
+                NotificationActivity.getInstance().deleteNotification(invitationModelArrayListFiltered.get(getAdapterPosition()).getNotificationId());
             }
         }
     }
