@@ -104,7 +104,7 @@ public class GroupDashboardActivity extends BaseActivity {
                             }
                             userInfoModel.setGroupList(groupList);
                             setGroupListData(groupList);
-                            getNotifications();
+                            getNotifications(false);
                         } else {
                             Toast.makeText(GroupDashboardActivity.this, "Oops, some problem occured!\nPlease try login again", Toast.LENGTH_LONG).show();
                             mfFirebaseAuth.signOut();
@@ -175,7 +175,7 @@ public class GroupDashboardActivity extends BaseActivity {
                     addCreatedGroupToUserInfo(groupModel);
 //                    addUserAsMember(groupKey);
                 } else {
-                    Toast.makeText(this, task.getException().toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     Utils.hideProgress();
                 }
             }
@@ -220,7 +220,7 @@ public class GroupDashboardActivity extends BaseActivity {
                     Toast.makeText(this, "Member Added", Toast.LENGTH_SHORT).show();
                     Utils.hideProgress();
                 } else {
-                    Toast.makeText(this, task.getException().toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     Utils.hideProgress();
                 }
             }

@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -46,25 +47,27 @@ public class BaseActivity extends AppCompatActivity {
     public static String KeyNotificationType = "notificationType";
     public static String KeySenderName = "senderName";
     public static String KeySenderId = "senderId";
-    public static String KeyMessage = "message";
+    public static String KeyNotificationId = "notificationId";
     public static DatabaseReference mdDatabaseReference;
 
     public static UserInfoModel userInfoModel;
     public static ArrayList<InvitationModel> invitationModelArrayList;
 
-    @BindView(R.id.textViewNotifyCount)
+    public static boolean isNotificationActivity = false;
+
     TextView textViewNotifyCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+//        ButterKnife.bind(this);
         setActionBarData();
         mdDatabaseReference = FirebaseDatabase.getInstance().getReference();
         invitationModelArrayList = new ArrayList<>();
         if (userInfoModel != null) {
             if (userInfoModel.getuID() != null) {
-                getNotifications();
+                getNotifications(false);
             }
         }
     }
@@ -73,6 +76,7 @@ public class BaseActivity extends AppCompatActivity {
         LayoutInflater mInflater = LayoutInflater.from(this);
         View view = mInflater.inflate(R.layout.profile_action_bar_layout, null);
         textViewTitle = view.findViewById(R.id.textViewUserName);
+        textViewNotifyCount = view.findViewById(R.id.textViewNotifyCount);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setCustomView(view);
@@ -81,6 +85,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void setTitle(String title) {
 //        this.title = title;
+        textViewTitle.setVisibility(View.VISIBLE);
         textViewTitle.setText(title);
     }
 
@@ -92,7 +97,7 @@ public class BaseActivity extends AppCompatActivity {
         startActivity(new Intent(this, NotificationActivity.class));
     }
 
-    public void getNotifications() {
+    public void getNotifications(boolean isNotificationActivity) {
         mdDatabaseReference.child(KeyNotifications)
                 .child(userInfoModel.getuID())
                 .addValueEventListener(new ValueEventListener() {
@@ -100,16 +105,20 @@ public class BaseActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         int notificationCount = 0;
                         if (dataSnapshot.getValue() != null) {
+                            invitationModelArrayList = new ArrayList<>();
                             for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                                 notificationCount++;
                                 String notificationType = dsp.child(KeyNotificationType).getValue().toString();
-                                if (notificationType.equals(getResources().getString(R.string.value_invitation))) {
+                                if (notificationType.equalsIgnoreCase(getResources().getString(R.string.value_invitation))) {
                                     invitationModelArrayList.add(new InvitationModel(notificationType,
                                             dsp.child(KeyGroupId).getValue().toString(),
                                             dsp.child(KeyGroupName).getValue().toString(),
                                             dsp.child(KeySenderName).getValue().toString(),
                                             dsp.child(KeySenderId).getValue().toString(),
-                                            dsp.child(KeyMessage).getValue().toString()));
+                                            dsp.child(KeyNotificationId).getValue().toString()));
+                                    if (isNotificationActivity) {
+                                        NotificationActivity.getInstance().setNotificationData();
+                                    }
                                 }
                             }
                         }

@@ -163,7 +163,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                                 overridePendingTransition(0, 0);
                                 finishAffinity();
                             } else {
-                                Toast.makeText(this, task.getException().toString(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 Utils.hideProgress();
                             }
                         }
