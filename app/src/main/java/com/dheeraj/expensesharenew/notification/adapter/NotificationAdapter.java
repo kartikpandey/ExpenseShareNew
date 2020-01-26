@@ -95,10 +95,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         @Override
         public void onClick(View view) {
             if (buttonAccept.equals(view)) {
-
+                NotificationActivity.getInstance().acceptInvitation(
+                        invitationModelArrayListFiltered.get(getAdapterPosition()).getGroupId(),
+                        invitationModelArrayListFiltered.get(getAdapterPosition()).getGroupName());
             } else if (buttonDecline.equals(view)) {
+                NotificationActivity.getInstance().denyInvitation(
+                        invitationModelArrayListFiltered.get(getAdapterPosition()).getNotificationId());
             } else if (imageDelete.equals(view)) {
-                NotificationActivity.getInstance().deleteNotification(invitationModelArrayListFiltered.get(getAdapterPosition()).getNotificationId());
+                NotificationActivity.getInstance().deleteNotification(
+                        invitationModelArrayListFiltered.get(getAdapterPosition()).getNotificationId());
             }
         }
     }
