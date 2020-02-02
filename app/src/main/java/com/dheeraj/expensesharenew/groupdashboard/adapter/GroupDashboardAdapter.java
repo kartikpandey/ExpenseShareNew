@@ -5,17 +5,15 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dheeraj.expensesharenew.R;
 import com.dheeraj.expensesharenew.groupDetail.GroupDetailActivity;
 import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
-import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
+import com.dheeraj.expensesharenew.groupdashboard.model.GroupModel;
 
 import java.util.List;
 

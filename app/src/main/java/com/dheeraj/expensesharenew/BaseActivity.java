@@ -8,11 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
-import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
-import com.dheeraj.expensesharenew.groupinfo.model.InvitationModel;
+import com.dheeraj.expensesharenew.groupinfo.model.NotificationModel;
 import com.dheeraj.expensesharenew.notification.NotificationActivity;
 import com.dheeraj.expensesharenew.userinfo.UserInfoModel;
 import com.google.firebase.database.DataSnapshot;
@@ -22,9 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -51,7 +45,7 @@ public class BaseActivity extends AppCompatActivity {
     public static DatabaseReference mdDatabaseReference;
 
     public static UserInfoModel userInfoModel;
-    public static ArrayList<InvitationModel> invitationModelArrayList;
+    public static ArrayList<NotificationModel> notificationModelArrayList;
 
     public static boolean isNotificationActivity = false;
 
@@ -64,7 +58,7 @@ public class BaseActivity extends AppCompatActivity {
 //        ButterKnife.bind(this);
         setActionBarData();
         mdDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        invitationModelArrayList = new ArrayList<>();
+        notificationModelArrayList = new ArrayList<>();
         if (userInfoModel != null) {
             if (userInfoModel.getuID() != null) {
                 getNotifications(false);
@@ -105,12 +99,12 @@ public class BaseActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         int notificationCount = 0;
                         if (dataSnapshot.getValue() != null) {
-                            invitationModelArrayList = new ArrayList<>();
+                            notificationModelArrayList = new ArrayList<>();
                             for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                                 notificationCount++;
                                 String notificationType = dsp.child(KeyNotificationType).getValue().toString();
                                 if (notificationType.equalsIgnoreCase(getResources().getString(R.string.value_invitation))) {
-                                    invitationModelArrayList.add(new InvitationModel(notificationType,
+                                    notificationModelArrayList.add(new NotificationModel(notificationType,
                                             dsp.child(KeyGroupId).getValue().toString(),
                                             dsp.child(KeyGroupName).getValue().toString(),
                                             dsp.child(KeySenderName).getValue().toString(),

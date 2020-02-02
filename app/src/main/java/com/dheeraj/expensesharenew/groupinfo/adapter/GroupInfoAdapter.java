@@ -10,8 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dheeraj.expensesharenew.R;
-import com.dheeraj.expensesharenew.groupdashboard.GroupMember;
-import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
+import com.dheeraj.expensesharenew.groupdashboard.model.GroupMember;
 import com.dheeraj.expensesharenew.groupinfo.GroupInfoActivity;
 
 import java.util.ArrayList;
