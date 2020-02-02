@@ -1,4 +1,4 @@
-package com.dheeraj.expensesharenew.groupdashboard;
+package com.dheeraj.expensesharenew.groupdashboard.model;
 
 public class GroupMember {
     String memberUid, memberName, memberType;

@@ -83,7 +83,6 @@
                 android:fontFamily="@font/capsuula"
                 android:gravity="center"
                 android:padding="1dp"
-                android:text="1"
                 android:textAlignment="center"
                 android:textColor="@color/cardview_dark_background"
                 android:textSize="10sp"

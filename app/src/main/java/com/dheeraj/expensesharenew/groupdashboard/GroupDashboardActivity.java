@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
@@ -23,16 +22,14 @@ import com.dheeraj.expensesharenew.LoginActivity;
 import com.dheeraj.expensesharenew.R;
 import com.dheeraj.expensesharenew.Utils;
 import com.dheeraj.expensesharenew.groupdashboard.adapter.GroupDashboardAdapter;
+import com.dheeraj.expensesharenew.groupdashboard.model.GroupMember;
+import com.dheeraj.expensesharenew.groupdashboard.model.GroupModel;
 import com.dheeraj.expensesharenew.userinfo.UserInfoModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -81,7 +78,7 @@ public class GroupDashboardActivity extends BaseActivity {
         mdDatabaseReference
                 .child(KeyUsersDetail)
                 .child(mfFirebaseAuth.getCurrentUser().getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue() != null) {

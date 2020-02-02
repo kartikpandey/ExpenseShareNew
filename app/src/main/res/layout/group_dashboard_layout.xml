@@ -11,18 +11,25 @@
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
-
         android:paddingRight="10dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageGroup"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/user_group_24" />
 
         <TextView
             android:id="@+id/textViewGroupName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/capsuula"
-            android:textColor="@color/colorLogoFront"
             android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toRightOf="@+id/imageGroup"
+            android:fontFamily="@font/capsuula"
             android:text="kartik pandey group"
-            android:layout_marginStart="5dp"
+            android:textColor="@color/colorLogoFront"
             android:textSize="14sp" />
 
         <!--<TextView

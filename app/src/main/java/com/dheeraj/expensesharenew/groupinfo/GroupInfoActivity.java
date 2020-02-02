@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -21,11 +20,9 @@ import com.dheeraj.expensesharenew.CustomViews.CustomButton;
 import com.dheeraj.expensesharenew.R;
 import com.dheeraj.expensesharenew.Utils;
 import com.dheeraj.expensesharenew.groupDetail.GroupDetailActivity;
-import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
-import com.dheeraj.expensesharenew.groupdashboard.GroupMember;
+import com.dheeraj.expensesharenew.groupdashboard.model.GroupMember;
 import com.dheeraj.expensesharenew.groupinfo.adapter.GroupInfoAdapter;
-import com.dheeraj.expensesharenew.groupinfo.model.InvitationModel;
-import com.dheeraj.expensesharenew.userinfo.UserInfoModel;
+import com.dheeraj.expensesharenew.groupinfo.model.NotificationModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -64,6 +61,11 @@ public class GroupInfoActivity extends BaseActivity {
 
         ButterKnife.bind(this);
         groupInfoActivity = this;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (GroupDetailActivity.groupDetail != null) {
             setGroupListData(GroupDetailActivity.groupDetail.getGroupMembersList());
         }
@@ -78,10 +80,10 @@ public class GroupInfoActivity extends BaseActivity {
 
     @OnClick(R.id.buttonAddMember)
     void onButtonAddMemberClick() {
-        createNewGroupDialog(this);
+        addNewMemberDialog(this);
     }
 
-    void createNewGroupDialog(Context context) {
+    void addNewMemberDialog(Context context) {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
@@ -154,18 +156,18 @@ public class GroupInfoActivity extends BaseActivity {
     //{xkTxChY7WeYW4S8oeX4c1uFnhLq1={uID=xkTxChY7WeYW4S8oeX4c1uFnhLq1, gender=m, mobNo=9876543210, fName=atul, memberOfGroups={-LxqE-UVVFaq5DBXeBBD={groupId=-LxqE-UVVFaq5DBXeBBD, groupName=atul}}, lName=pandey}} }
     void sendInvitation(String memberUid) {
         String notificationId = database.getReference().push().getKey();
-        InvitationModel invitationModel = new InvitationModel(
+        NotificationModel notificationModel = new NotificationModel(
                 getResources().getString(R.string.value_invitation),
                 GroupDetailActivity.groupDetail.getGroupId(),
                 GroupDetailActivity.groupDetail.getGroupName(),
                 userInfoModel.getfName() + " " + userInfoModel.getlName(),
-                userInfoModel.getuID(),notificationId
+                userInfoModel.getuID(), notificationId
         );
         mdDatabaseReference
                 .child(KeyNotifications)
                 .child(memberUid)
                 .child(notificationId)
-                .setValue(invitationModel).addOnCompleteListener(task -> {
+                .setValue(notificationModel).addOnCompleteListener(task -> {
             {
                 if (task.isSuccessful()) {
                     Toast.makeText(this, "Invitation sent", Toast.LENGTH_SHORT).show();

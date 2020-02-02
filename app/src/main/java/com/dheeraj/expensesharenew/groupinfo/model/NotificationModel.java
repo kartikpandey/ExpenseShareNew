@@ -1,9 +1,9 @@
 package com.dheeraj.expensesharenew.groupinfo.model;
 
-public class InvitationModel {
-    public String groupId, groupName, senderName, senderId, notificationId, notificationType;
+public class NotificationModel {
+    public String groupId, groupName, senderName, senderId, notificationId, notificationType, notificationStatus;
 
-    public InvitationModel(String notificationType, String groupId, String groupName, String senderName, String senderId, String notificationId) {
+    public NotificationModel(String notificationType, String groupId, String groupName, String senderName, String senderId, String notificationId) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.senderName = senderName;
@@ -58,5 +58,13 @@ public class InvitationModel {
 
     public void setNotificationType(String notificationType) {
         this.notificationType = notificationType;
+    }
+
+    public String getNotificationStatus() {
+        return notificationStatus;
+    }
+
+    public void setNotificationStatus(String notificationStatus) {
+        this.notificationStatus = notificationStatus;
     }
 }

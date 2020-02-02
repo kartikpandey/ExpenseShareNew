@@ -1,10 +1,10 @@
-package com.dheeraj.expensesharenew.groupdashboard;
+package com.dheeraj.expensesharenew.groupdashboard.model;
 
 import java.util.ArrayList;
 
 public class GroupModel {
-    String groupId, groupName;
-    ArrayList<GroupMember> groupMembersList;
+    public String groupId, groupName;
+    public ArrayList<GroupMember> groupMembersList;
 
     public GroupModel() {
     }

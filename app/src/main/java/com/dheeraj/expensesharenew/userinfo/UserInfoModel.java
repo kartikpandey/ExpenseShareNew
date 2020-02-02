@@ -1,6 +1,6 @@
 package com.dheeraj.expensesharenew.userinfo;
 
-import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
+import com.dheeraj.expensesharenew.groupdashboard.model.GroupModel;
 
 import java.util.ArrayList;
 

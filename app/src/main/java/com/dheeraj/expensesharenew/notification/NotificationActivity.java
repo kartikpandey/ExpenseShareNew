@@ -1,19 +1,16 @@
 package com.dheeraj.expensesharenew.notification;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.dheeraj.expensesharenew.BaseActivity;
 import com.dheeraj.expensesharenew.R;
 import com.dheeraj.expensesharenew.Utils;
-import com.dheeraj.expensesharenew.groupdashboard.GroupMember;
-import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
-import com.dheeraj.expensesharenew.groupdashboard.adapter.GroupDashboardAdapter;
+import com.dheeraj.expensesharenew.groupdashboard.model.GroupMember;
+import com.dheeraj.expensesharenew.groupdashboard.model.GroupModel;
 import com.dheeraj.expensesharenew.notification.adapter.NotificationAdapter;
 
 import java.util.ArrayList;
@@ -45,7 +42,7 @@ public class NotificationActivity extends BaseActivity {
     }
 
     public void setNotificationData() {
-        notificationAdapter = new NotificationAdapter(invitationModelArrayList);
+        notificationAdapter = new NotificationAdapter(notificationModelArrayList);
         recyclerViewNotifications.setHasFixedSize(true);
         recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewNotifications.setAdapter(notificationAdapter);
@@ -68,16 +65,18 @@ public class NotificationActivity extends BaseActivity {
                 }
             }
         });
-
+        notificationAdapter.notifyDataSetChanged();
     }
 
-    public void acceptInvitation(String groupId, String groupName) {
+    public void acceptInvitation(String groupId, String groupName, String notificationId) {
         GroupMember groupMember = new GroupMember(userInfoModel.getuID(),
                 userInfoModel.getfName() + " " + userInfoModel.getlName(),
                 "Member");
         addMemberToGroup(groupId, groupMember);
 
         addGroupToUserDetail(groupId, groupName);
+
+        changeNotificationStatus(notificationId);
 
     }
 
@@ -98,6 +97,13 @@ public class NotificationActivity extends BaseActivity {
                 .child(KeyMemberOfGroups)
                 .child(groupId)
                 .setValue(groupModel);
+    }
+
+    void changeNotificationStatus(String notificationId) {
+        mdDatabaseReference.child(KeyNotifications)
+                .child(userInfoModel.getuID())
+                .child(notificationId)
+                .child("notificationStatus").setValue("Accepted");
     }
 
     public void denyInvitation(String notificationId) {

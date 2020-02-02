@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dheeraj.expensesharenew.CustomViews.CustomButton;
 import com.dheeraj.expensesharenew.R;
-import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
-import com.dheeraj.expensesharenew.groupinfo.model.InvitationModel;
+import com.dheeraj.expensesharenew.groupdashboard.model.GroupModel;
+import com.dheeraj.expensesharenew.groupinfo.model.NotificationModel;
 import com.dheeraj.expensesharenew.notification.NotificationActivity;
 
 import java.util.ArrayList;
@@ -23,16 +23,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
-    public final ArrayList<InvitationModel> invitationModelArrayList;
+    public final ArrayList<NotificationModel> notificationModelArrayList;
     private List<GroupModel> groupModelList;
-    private ArrayList<InvitationModel> invitationModelArrayListFiltered;
+    private ArrayList<NotificationModel> notificationModelArrayListFiltered;
     private Context context;
     private View view;
     String customerName;
 
-    public NotificationAdapter(ArrayList<InvitationModel> invitationModelArrayList) {
-        this.invitationModelArrayList = invitationModelArrayList;
-        this.invitationModelArrayListFiltered = invitationModelArrayList;
+    public NotificationAdapter(ArrayList<NotificationModel> notificationModelArrayList) {
+        this.notificationModelArrayList = notificationModelArrayList;
+        this.notificationModelArrayListFiltered = notificationModelArrayList;
     }
 
     @Override
@@ -45,15 +45,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.textNotificationHeading.setText(invitationModelArrayListFiltered.get(position).getNotificationType());
-        holder.textInviteMessage.setText(invitationModelArrayListFiltered.get(position).getSenderName() +
+        holder.textNotificationHeading.setText(notificationModelArrayListFiltered.get(position).getNotificationType());
+        holder.textInviteMessage.setText(notificationModelArrayListFiltered.get(position).getSenderName() +
                 " invited you to join expenare group " +
-                invitationModelArrayListFiltered.get(position).getGroupName());
+                notificationModelArrayListFiltered.get(position).getGroupName());
     }
 
     @Override
     public int getItemCount() {
-        return invitationModelArrayListFiltered.size();
+        return notificationModelArrayListFiltered.size();
     }
 
 
@@ -96,14 +96,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public void onClick(View view) {
             if (buttonAccept.equals(view)) {
                 NotificationActivity.getInstance().acceptInvitation(
-                        invitationModelArrayListFiltered.get(getAdapterPosition()).getGroupId(),
-                        invitationModelArrayListFiltered.get(getAdapterPosition()).getGroupName());
+                        notificationModelArrayListFiltered.get(getAdapterPosition()).getGroupId(),
+                        notificationModelArrayListFiltered.get(getAdapterPosition()).getGroupName(),
+                        notificationModelArrayListFiltered.get(getAdapterPosition()).getNotificationId());
             } else if (buttonDecline.equals(view)) {
                 NotificationActivity.getInstance().denyInvitation(
-                        invitationModelArrayListFiltered.get(getAdapterPosition()).getNotificationId());
+                        notificationModelArrayListFiltered.get(getAdapterPosition()).getNotificationId());
             } else if (imageDelete.equals(view)) {
                 NotificationActivity.getInstance().deleteNotification(
-                        invitationModelArrayListFiltered.get(getAdapterPosition()).getNotificationId());
+                        notificationModelArrayListFiltered.get(getAdapterPosition()).getNotificationId());
             }
         }
     }

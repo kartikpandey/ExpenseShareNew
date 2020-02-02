@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import com.dheeraj.expensesharenew.BaseActivity;
 import com.dheeraj.expensesharenew.R;
-import com.dheeraj.expensesharenew.groupdashboard.GroupMember;
-import com.dheeraj.expensesharenew.groupdashboard.GroupModel;
+import com.dheeraj.expensesharenew.groupdashboard.model.GroupMember;
+import com.dheeraj.expensesharenew.groupdashboard.model.GroupModel;
 import com.dheeraj.expensesharenew.groupinfo.GroupInfoActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +38,7 @@ public class GroupDetailActivity extends BaseActivity {
     }
 
     void getGroupData(String groupId) {
-        mdDatabaseReference.child(KeyGroupsList).child(groupId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mdDatabaseReference.child(KeyGroupsList).child(groupId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -57,7 +57,7 @@ public class GroupDetailActivity extends BaseActivity {
                     groupDetail.setGroupMembersList(groupMembersList);
 //                    setGroupListData(groupList);
                 } else {
-                    Toast.makeText(GroupDetailActivity.this, "Oops, some problem occured!\nPlease Contact Administrator", Toast.LENGTH_LONG).show();
+                    Toast.makeText(GroupDetailActivity.this, "No expenses yet!", Toast.LENGTH_LONG).show();
                 }
             }
 
