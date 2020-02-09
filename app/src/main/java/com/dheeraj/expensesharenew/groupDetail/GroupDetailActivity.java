@@ -1,14 +1,21 @@
 package com.dheeraj.expensesharenew.groupDetail;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatEditText;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dheeraj.expensesharenew.BaseActivity;
+import com.dheeraj.expensesharenew.CustomViews.CustomButton;
 import com.dheeraj.expensesharenew.R;
 import com.dheeraj.expensesharenew.groupdashboard.model.GroupMember;
 import com.dheeraj.expensesharenew.groupdashboard.model.GroupModel;
@@ -20,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class GroupDetailActivity extends BaseActivity {
 
@@ -78,6 +86,42 @@ public class GroupDetailActivity extends BaseActivity {
 //                .setValue(groupMember);
 //    }
 
+    @OnClick(R.id.buttonAddExp)
+    void onButtonAddExpClick(){
+        addNewExpenseDialog(this);
+    }
+
+    void addNewExpenseDialog(Context context) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.new_expense_dialog_layout);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        CustomButton buttonAddExp = dialog.findViewById(R.id.buttonAddExp);
+        AppCompatEditText editTextAmount= dialog.findViewById(R.id.editTextAmount);
+        AppCompatEditText editTextParticular= dialog.findViewById(R.id.editTextParticular);
+        ImageView imgClose = dialog.findViewById(R.id.imgClose);
+        editTextParticular.requestFocus();
+
+        buttonAddExp.setOnClickListener(v -> {
+            if (editTextAmount.getText().toString().isEmpty()) {
+                editTextAmount.requestFocus();
+                editTextAmount.setError("Enter member's mobile number");
+            } else if(editTextParticular.getText().toString().isEmpty()){
+                editTextParticular.requestFocus();
+                editTextParticular.setError("Enter member's mobile number");
+            }else {
+
+                dialog.cancel();
+            }
+        });
+
+        imgClose.setOnClickListener(v -> {
+            dialog.cancel();
+        });
+        dialog.show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

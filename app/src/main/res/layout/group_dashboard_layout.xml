@@ -7,30 +7,31 @@
     <RelativeLayout
         android:id="@+id/relativeLayoutGroup"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:paddingRight="10dp">
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="10dp">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageGroup"
             android:layout_width="30dp"
-            android:layout_height="match_parent"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:background="@mipmap/user_group_24" />
+            android:background="@drawable/ic_group" />
 
         <TextView
             android:id="@+id/textViewGroupName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="15dp"
             android:layout_toRightOf="@+id/imageGroup"
             android:fontFamily="@font/capsuula"
             android:text="kartik pandey group"
             android:textColor="@color/colorLogoFront"
-            android:textSize="14sp" />
+            android:textSize="15sp"
+            android:textStyle="bold"/>
 
         <!--<TextView
             android:id="@+id/textViewLoadingPlan"
@@ -61,7 +62,10 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/imageGroup"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/imageGroup"
             android:background="#BBB" />
 
     </RelativeLayout>

@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
     android:background="#89ffffff"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="5dp"
             android:layout_weight="1"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:text="Sender name" />
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -56,7 +57,8 @@
             android:layout_toLeftOf="@+id/buttonAccept"
             android:text="Decline"
             android:textColor="@color/white"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:visibility="gone"/>
 
         <com.dheeraj.expensesharenew.CustomViews.CustomButton
             android:id="@+id/buttonAccept"

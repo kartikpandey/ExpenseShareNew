@@ -49,6 +49,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.textInviteMessage.setText(notificationModelArrayListFiltered.get(position).getSenderName() +
                 " invited you to join expenare group " +
                 notificationModelArrayListFiltered.get(position).getGroupName());
+        if (notificationModelArrayListFiltered.get(position).getNotificationStatus() != null) {
+            if (!notificationModelArrayListFiltered.get(position).getNotificationStatus().isEmpty()) {
+                holder.buttonAccept.setVisibility(View.GONE);
+                holder.buttonDecline.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override

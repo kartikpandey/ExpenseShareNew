@@ -22,4 +22,5 @@
     <string name="admin">Admin</string>
     <string name="group_created">Group Created</string>
     <string name="value_invitation">Invitation</string>
+    <string name="notifications">Notifications</string>
 </resources>

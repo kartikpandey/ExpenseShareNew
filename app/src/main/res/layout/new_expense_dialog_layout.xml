@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparentButtonColor"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/imgCalender"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_calendar" />
+
+    <TextView
+        android:id="@+id/textViewDate"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/imgCalender"
+        android:gravity="center_vertical"
+        android:text="12/01/2020"
+        android:textColor="@color/black"
+        android:textSize="14dp" />
+
+    <ImageView
+        android:id="@+id/imgClose"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_close_24dp" />
+
+    <ImageView
+        android:id="@+id/imgParticular"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="13dp"
+        android:layout_below="@id/imgCalender"
+        android:src="@drawable/ic_detail" />
+
+    <TextView
+        android:id="@+id/textViewParticular"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_below="@+id/imgCalender"
+        android:layout_toRightOf="@+id/imgParticular"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:gravity="center_vertical"
+        android:text="Particular"
+        android:textColor="@color/colorAccent"
+        android:textSize="14dp" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextParticular"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="top"
+        android:padding="5dp"
+        android:layout_below="@+id/textViewParticular"
+        android:background="@drawable/edittext_drawable"
+        android:inputType="textAutoCorrect" />
+
+    <ImageView
+        android:id="@+id/imgAmount"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/editTextParticular"
+        android:src="@drawable/ic_rupee" />
+
+    <TextView
+        android:id="@+id/textViewAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_toEndOf="@+id/imgAmount"
+        android:layout_marginStart="5dp"
+        android:layout_below="@+id/editTextParticular"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:text="Amount"
+        android:textColor="@color/colorAccent"
+        android:textSize="14dp" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textSize="20dp"
+        android:layout_below="@+id/textViewAmount"
+        android:background="@drawable/edittext_drawable"
+        android:inputType="numberDecimal" />
+
+    <com.dheeraj.expensesharenew.CustomViews.CustomButton
+        android:id="@+id/buttonAddExp"
+        android:layout_width="wrap_content"
+        android:layout_height="31dp"
+        android:layout_below="@+id/editTextAmount"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="Add Expense"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
+
+</RelativeLayout>

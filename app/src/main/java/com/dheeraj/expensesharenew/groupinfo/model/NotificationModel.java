@@ -3,13 +3,14 @@ package com.dheeraj.expensesharenew.groupinfo.model;
 public class NotificationModel {
     public String groupId, groupName, senderName, senderId, notificationId, notificationType, notificationStatus;
 
-    public NotificationModel(String notificationType, String groupId, String groupName, String senderName, String senderId, String notificationId) {
+    public NotificationModel(String notificationType, String groupId, String groupName, String senderName, String senderId, String notificationId, String notificationStatus) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.senderName = senderName;
         this.senderId = senderId;
         this.notificationId = notificationId;
         this.notificationType = notificationType;
+        this.notificationStatus = notificationStatus;
     }
 
     public String getGroupId() {
