@@ -42,6 +42,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String KeySenderName = "senderName";
     public static String KeySenderId = "senderId";
     public static String KeyNotificationId = "notificationId";
+    public static String KeyNotificationStatus = "notificationStatus";
     public static DatabaseReference mdDatabaseReference;
 
     public static UserInfoModel userInfoModel;
@@ -98,22 +99,30 @@ public class BaseActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         int notificationCount = 0;
+                        notificationModelArrayList = new ArrayList<>();
                         if (dataSnapshot.getValue() != null) {
-                            notificationModelArrayList = new ArrayList<>();
                             for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                                 notificationCount++;
                                 String notificationType = dsp.child(KeyNotificationType).getValue().toString();
                                 if (notificationType.equalsIgnoreCase(getResources().getString(R.string.value_invitation))) {
+                                    String status = "";
+                                    if (dsp.child(KeyNotificationStatus).getValue() != null) {
+                                        status = dsp.child(KeyNotificationStatus).getValue().toString();
+                                    }
                                     notificationModelArrayList.add(new NotificationModel(notificationType,
                                             dsp.child(KeyGroupId).getValue().toString(),
                                             dsp.child(KeyGroupName).getValue().toString(),
                                             dsp.child(KeySenderName).getValue().toString(),
                                             dsp.child(KeySenderId).getValue().toString(),
-                                            dsp.child(KeyNotificationId).getValue().toString()));
+                                            dsp.child(KeyNotificationId).getValue().toString(), status));
                                     if (isNotificationActivity) {
                                         NotificationActivity.getInstance().setNotificationData();
                                     }
                                 }
+                            }
+                        }else{
+                            if (isNotificationActivity) {
+                                NotificationActivity.getInstance().setNotificationData();
                             }
                         }
                         textViewNotifyCount.setText(notificationCount + "");

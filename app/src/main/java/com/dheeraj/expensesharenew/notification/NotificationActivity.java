@@ -37,6 +37,7 @@ public class NotificationActivity extends BaseActivity {
         setContentView(R.layout.activity_notification);
         ButterKnife.bind(this);
         instance = this;
+        setTitle(getString(R.string.notifications));
 //        setNotificationData();
         getNotifications(true);
     }
@@ -57,15 +58,8 @@ public class NotificationActivity extends BaseActivity {
         mdDatabaseReference.child(KeyNotifications)
                 .child(userInfoModel.getuID())
                 .child(notificationId)
-                .removeValue().addOnCompleteListener(task -> {
-            {
-                Utils.hideProgress();
-                if (task.isSuccessful()) {
-                } else {
-                }
-            }
-        });
-        notificationAdapter.notifyDataSetChanged();
+                .removeValue();
+        getNotifications(true);
     }
 
     public void acceptInvitation(String groupId, String groupName, String notificationId) {
@@ -89,8 +83,8 @@ public class NotificationActivity extends BaseActivity {
                 .setValue(groupMember);
     }
 
-    void addGroupToUserDetail(String groupId, String groupName){
-        GroupModel groupModel = new GroupModel(groupId,groupName, new ArrayList<>());
+    void addGroupToUserDetail(String groupId, String groupName) {
+        GroupModel groupModel = new GroupModel(groupId, groupName, new ArrayList<>());
         mdDatabaseReference
                 .child(KeyUsersDetail)
                 .child(userInfoModel.getuID())
@@ -104,6 +98,7 @@ public class NotificationActivity extends BaseActivity {
                 .child(userInfoModel.getuID())
                 .child(notificationId)
                 .child("notificationStatus").setValue("Accepted");
+        getNotifications(true);
     }
 
     public void denyInvitation(String notificationId) {

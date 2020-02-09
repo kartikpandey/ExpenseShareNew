@@ -126,7 +126,18 @@ public class GroupInfoActivity extends BaseActivity {
                         if (!dataSnapshot.getValue().toString().isEmpty()) {
                             for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                                 if (!dsp.child(KeyUID).getValue().toString().equals(userInfoModel.getuID())) {
-                                    sendInvitation(dsp.child(KeyUID).getValue().toString());
+                                    boolean isFound = false;
+                                    for (GroupMember groupMember : GroupDetailActivity.groupDetail.getGroupMembersList()) {
+                                        if (dsp.child(KeyUID).getValue().toString().equals(groupMember.getMemberUid())) {
+                                            isFound = true;
+                                            Utils.hideProgress();
+                                            Toast.makeText(GroupInfoActivity.this, "This person is already a group member", Toast.LENGTH_LONG).show();
+                                            break;
+                                        }
+                                    }
+                                    if (!isFound) {
+                                        sendInvitation(dsp.child(KeyUID).getValue().toString());
+                                    }
                                 } else {
                                     Utils.hideProgress();
                                     Toast.makeText(GroupInfoActivity.this, "Looks like its your mobile number.", Toast.LENGTH_LONG).show();
@@ -161,7 +172,7 @@ public class GroupInfoActivity extends BaseActivity {
                 GroupDetailActivity.groupDetail.getGroupId(),
                 GroupDetailActivity.groupDetail.getGroupName(),
                 userInfoModel.getfName() + " " + userInfoModel.getlName(),
-                userInfoModel.getuID(), notificationId
+                userInfoModel.getuID(), notificationId, ""
         );
         mdDatabaseReference
                 .child(KeyNotifications)
