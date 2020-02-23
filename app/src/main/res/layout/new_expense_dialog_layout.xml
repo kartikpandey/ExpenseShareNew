@@ -34,8 +34,8 @@
         android:id="@+id/imgParticular"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginTop="13dp"
         android:layout_below="@id/imgCalender"
+        android:layout_marginTop="13dp"
         android:src="@drawable/ic_detail" />
 
     <TextView
@@ -43,9 +43,9 @@
         android:layout_width="wrap_content"
         android:layout_height="25dp"
         android:layout_below="@+id/imgCalender"
-        android:layout_toRightOf="@+id/imgParticular"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/imgParticular"
         android:gravity="center_vertical"
         android:text="Particular"
         android:textColor="@color/colorAccent"
@@ -55,28 +55,29 @@
         android:id="@+id/editTextParticular"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="top"
-        android:padding="5dp"
         android:layout_below="@+id/textViewParticular"
         android:background="@drawable/edittext_drawable"
-        android:inputType="textAutoCorrect" />
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:padding="5dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
 
     <ImageView
         android:id="@+id/imgAmount"
         android:layout_width="18dp"
         android:layout_height="18dp"
-        android:layout_marginTop="15dp"
         android:layout_below="@id/editTextParticular"
+        android:layout_marginTop="15dp"
         android:src="@drawable/ic_rupee" />
 
     <TextView
         android:id="@+id/textViewAmount"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
-        android:layout_toEndOf="@+id/imgAmount"
-        android:layout_marginStart="5dp"
         android:layout_below="@+id/editTextParticular"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/imgAmount"
         android:gravity="center_vertical"
         android:text="Amount"
         android:textColor="@color/colorAccent"
@@ -86,11 +87,11 @@
         android:id="@+id/editTextAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:textSize="20dp"
         android:layout_below="@+id/textViewAmount"
         android:background="@drawable/edittext_drawable"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        android:padding="5dp"
+        android:textSize="20dp" />
 
     <com.dheeraj.expensesharenew.CustomViews.CustomButton
         android:id="@+id/buttonAddExp"
@@ -101,8 +102,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         android:text="Add Expense"
-        android:textStyle="bold"
         android:textColor="@color/white"
-        android:textSize="10sp" />
+        android:textSize="10sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

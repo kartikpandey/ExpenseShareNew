@@ -4,20 +4,107 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".groupDetail.GroupDetailActivity"
-    android:background="@drawable/radial_background">
+    android:background="@drawable/radial_background"
+    android:padding="10dp"
+    tools:context=".groupDetail.GroupDetailActivity">
 
-
-    <ImageButton
-        android:id="@+id/buttonAddExp"
+    <TextView
+        android:id="@+id/textViewSelectGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add"
-        android:background="@null"
+        android:text="@string/change_group" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutSpinnerGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewSelectGroup"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edittext_drawable"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="3dp">
+
+        <Spinner
+            android:id="@+id/spinnerGroupsList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/imageViewGroupInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/ic_group_info" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutTotalExpense"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/linearLayoutSpinnerGroup"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="Total Expenses Yet"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_rupee"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:layout_toStartOf="@+id/textViewTotalExpense"/>
+
+        <TextView
+            android:id="@+id/textViewTotalExpense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text=""
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewGroupDetail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relativeLayoutTotalExpense"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/transparent"
+        android:layoutAnimation="@anim/layout_animation_fall_down"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/group_layout" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginRight="30dp"
-        android:elevation="5dp"/>
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="40dp"
+        android:background="@null"
+        android:elevation="10dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="30dp">
+
+        <ImageView
+            android:id="@+id/buttonAddExp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_add" />
+
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>
