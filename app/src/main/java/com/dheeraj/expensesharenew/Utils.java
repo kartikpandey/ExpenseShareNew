@@ -4,9 +4,15 @@ import android.app.Activity;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class Utils {
 
     private static KProgressHUD kProgressHUD;
+
+    private static Calendar calendar;
+    private static SimpleDateFormat simpledateformat;
 
     public static void showProgress(Activity activity, String msg, String detail) {
         if (kProgressHUD != null) {
@@ -20,7 +26,7 @@ public class Utils {
                         .setCancellable(true)
                         .setAnimationSpeed(2)
                         .setDimAmount(0.5f);
-            }else{
+            } else {
                 kProgressHUD = KProgressHUD.create(activity)
                         .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                         .setLabel(msg)
@@ -39,4 +45,18 @@ public class Utils {
             kProgressHUD.dismiss();
         }
     }
+
+    public static String getCurrentDate() {
+        calendar = Calendar.getInstance();
+        simpledateformat = new SimpleDateFormat("dd-MMM-yyyy");
+        return simpledateformat.format(calendar.getTime());
+    }
+
+    public static String getCurrentTime(){
+        calendar = Calendar.getInstance();
+        simpledateformat = new SimpleDateFormat("hh:mm a");
+        return simpledateformat.format(calendar.getTime());
+    }
+
+
 }

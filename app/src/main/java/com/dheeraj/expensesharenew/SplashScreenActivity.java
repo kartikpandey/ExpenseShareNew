@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dheeraj.expensesharenew.groupDetail.GroupDetailActivity;
 import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
 import com.dheeraj.expensesharenew.userinfo.UserDetailsActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -74,7 +75,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue() != null) {
-                            startActivity(new Intent(SplashScreenActivity.this, GroupDashboardActivity.class));
+                            startActivity(new Intent(SplashScreenActivity.this, GroupDetailActivity.class));
                             finishAffinity();
                         } else {
                             startActivity(new Intent(SplashScreenActivity.this, UserDetailsActivity.class));

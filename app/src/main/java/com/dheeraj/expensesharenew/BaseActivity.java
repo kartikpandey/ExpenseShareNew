@@ -43,6 +43,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String KeySenderId = "senderId";
     public static String KeyNotificationId = "notificationId";
     public static String KeyNotificationStatus = "notificationStatus";
+    public static String KeyExpenseDetail = "expenseDetail";
     public static DatabaseReference mdDatabaseReference;
 
     public static UserInfoModel userInfoModel;

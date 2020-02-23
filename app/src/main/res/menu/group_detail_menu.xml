@@ -8,9 +8,9 @@
         app:showAsAction="always">
         <menu>
             <item
-                android:icon="@drawable/ic_group_info"
-                android:id="@+id/groupInfo"
-                android:title="Group Info"
+                android:icon="@drawable/ic_new_group_24dp"
+                android:id="@+id/newGroup"
+                android:title="New Group"
                 app:showAsAction="ifRoom" />
         </menu>
     </item>
