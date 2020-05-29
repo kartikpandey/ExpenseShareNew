@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
+import com.dheeraj.expensesharenew.groupDetail.GroupDetailActivity;
 import com.dheeraj.expensesharenew.LoginActivity;
 import com.dheeraj.expensesharenew.R;
 import com.dheeraj.expensesharenew.Utils;
@@ -60,7 +60,6 @@ public class UserDetailsActivity extends AppCompatActivity {
     String fName, lName, mobNo, gender = "m";
 
     boolean isExists;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +158,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(this, "Information Saved", Toast.LENGTH_SHORT).show();
                                 Utils.hideProgress();
-                                startActivity(new Intent(this, GroupDashboardActivity.class));
+                                startActivity(new Intent(this, GroupDetailActivity.class));
                                 overridePendingTransition(0, 0);
                                 finishAffinity();
                             } else {

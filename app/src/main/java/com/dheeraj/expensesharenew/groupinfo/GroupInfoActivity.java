@@ -131,7 +131,7 @@ public class GroupInfoActivity extends BaseActivity {
                                         if (dsp.child(KeyUID).getValue().toString().equals(groupMember.getMemberUid())) {
                                             isFound = true;
                                             Utils.hideProgress();
-                                            Toast.makeText(GroupInfoActivity.this, "This person is already a group member", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(GroupInfoActivity.this, "This person is already in group.", Toast.LENGTH_LONG).show();
                                             break;
                                         }
                                     }

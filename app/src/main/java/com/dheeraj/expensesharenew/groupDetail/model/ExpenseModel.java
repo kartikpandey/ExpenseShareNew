@@ -2,13 +2,14 @@ package com.dheeraj.expensesharenew.groupDetail.model;
 
 public class ExpenseModel {
 
-    private String expenseDate, userId, userName, groupId, expenseAmount, expenseParticular;
+    private String expenseDate,expenseTime, userId, userName, groupId, expenseAmount, expenseParticular;
 
     public ExpenseModel() {
     }
 
-    public ExpenseModel(String expenseDate, String userId, String userName, String groupId, String expenseAmount, String expenseParticular) {
+    public ExpenseModel(String expenseDate,String expenseTime, String userId, String userName, String groupId, String expenseAmount, String expenseParticular) {
         this.expenseDate = expenseDate;
+        this.expenseTime = expenseTime;
         this.userId = userId;
         this.userName = userName;
         this.groupId = groupId;

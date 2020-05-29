@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
+import com.dheeraj.expensesharenew.groupDetail.GroupDetailActivity;
 import com.dheeraj.expensesharenew.userinfo.UserDetailsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.getValue() != null) {
-                                startActivity(new Intent(LoginActivity.this, GroupDashboardActivity.class));
+                                startActivity(new Intent(LoginActivity.this, GroupDetailActivity.class));
                                 overridePendingTransition(0, 0);
                                 finishAffinity();
                             } else {
