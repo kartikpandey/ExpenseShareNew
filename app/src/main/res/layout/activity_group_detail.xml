@@ -35,6 +35,7 @@
             android:id="@+id/imageViewGroupInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginEnd="5dp"
             android:src="@drawable/ic_group_info" />
 
@@ -76,6 +77,17 @@
             android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/noGroupText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:textSize="15sp"
+        android:text="No groups yet!\nYou can add group from menu"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewGroupDetail"
         android:layout_width="match_parent"
@@ -93,9 +105,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="30dp"
         android:background="@null"
         android:elevation="10dp"
+        app:cardElevation="5dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="30dp">
 
@@ -103,6 +116,7 @@
             android:id="@+id/buttonAddExp"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:visibility="gone"
             android:src="@drawable/ic_add" />
 
     </androidx.cardview.widget.CardView>

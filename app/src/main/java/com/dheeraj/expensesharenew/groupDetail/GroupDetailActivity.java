@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
@@ -27,7 +28,6 @@ import com.dheeraj.expensesharenew.Utils;
 import com.dheeraj.expensesharenew.groupDetail.adapter.GroupDetailAdapter;
 import com.dheeraj.expensesharenew.groupDetail.adapter.SpinnerGroupListAdapter;
 import com.dheeraj.expensesharenew.groupDetail.model.ExpenseModel;
-import com.dheeraj.expensesharenew.groupdashboard.GroupDashboardActivity;
 import com.dheeraj.expensesharenew.groupdashboard.model.GroupMember;
 import com.dheeraj.expensesharenew.groupdashboard.model.GroupModel;
 import com.dheeraj.expensesharenew.groupinfo.GroupInfoActivity;
@@ -58,6 +58,15 @@ public class GroupDetailActivity extends BaseActivity {
 
     @BindView(R.id.textViewTotalExpense)
     TextView textViewTotalExpense;
+
+    @BindView(R.id.imageViewGroupInfo)
+    ImageView imageViewGroupInfo;
+
+    @BindView(R.id.buttonAddExp)
+    ImageView buttonAddExp;
+
+     @BindView(R.id.noGroupText)
+    TextView noGroupText;
 
     @BindView(R.id.recyclerViewGroupDetail)
     RecyclerView recyclerViewGroupDetail;
@@ -169,6 +178,16 @@ public class GroupDetailActivity extends BaseActivity {
     private void setSpinnerGroupListData(ArrayList<GroupModel> groupList) {
         SpinnerGroupListAdapter groupListAdapter = new SpinnerGroupListAdapter(this, R.layout.spinner_layout, groupList);
         spinnerGroupsList.setAdapter(groupListAdapter);
+        if(groupsList.isEmpty()){
+            imageViewGroupInfo.setVisibility(View.GONE);
+            buttonAddExp.setVisibility(View.GONE);
+            noGroupText.setVisibility(View.VISIBLE);
+        }
+        else{
+            imageViewGroupInfo.setVisibility(View.VISIBLE);
+            buttonAddExp.setVisibility(View.VISIBLE);
+            noGroupText.setVisibility(View.GONE);
+        }
     }
 
     void getGroupData(String groupId) {
@@ -212,7 +231,9 @@ public class GroupDetailActivity extends BaseActivity {
 
     @OnClick(R.id.imageViewGroupInfo)
     void onGroupInfoClick() {
-        startActivity(new Intent(this, GroupInfoActivity.class));
+        if(!groupsList.isEmpty()){
+            startActivity(new Intent(this, GroupInfoActivity.class));
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -268,7 +289,8 @@ public class GroupDetailActivity extends BaseActivity {
                 editTextParticular.setError("Enter particular");
             } else {
                 saveExpense(new ExpenseModel(
-                        Utils.getCurrentDate() + " " + Utils.getCurrentTime(),
+                        Utils.getCurrentDate(),
+                        Utils.getCurrentTime(),
                         userInfoModel.getuID(),
                         userInfoModel.getfName() + " " + userInfoModel.getlName(),
                         groupDetail.groupId,
@@ -289,6 +311,7 @@ public class GroupDetailActivity extends BaseActivity {
         mdDatabaseReference
                 .child(KeyExpenseDetail)
                 .child(expense.getGroupId())
+                .child(Utils.getCurrentMonthAndYear())
                 .child(expenseId)
                 .setValue(expense).addOnCompleteListener(task -> {
             {
@@ -303,7 +326,7 @@ public class GroupDetailActivity extends BaseActivity {
 
     void getExpenses(String groupId) {
         mdDatabaseReference.child(KeyExpenseDetail)
-                .child(groupId).addValueEventListener(new ValueEventListener() {
+                .child(groupId).child(Utils.getCurrentMonthAndYear()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 expenseList.clear();
